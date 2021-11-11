@@ -16,15 +16,18 @@ import java.util.List;
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder>{
 
     List<Item> ItemList;
+    private OnItemListener mOnItemListener;
 
-    public ItemAdapter(List<Item> itemList){ this.ItemList = itemList; }
+    public ItemAdapter(List<Item> itemList, OnItemListener onItemListener){
+        this.ItemList = itemList;
+        this.mOnItemListener = onItemListener;
+    }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_hit, parent, false);
-        ItemViewHolder ivh = new ItemViewHolder(v);
-        return ivh;
+        return new ItemViewHolder(v, mOnItemListener);
     }
 
     @Override
@@ -40,18 +43,32 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         return ItemList.size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+    public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView picture;
         TextView name;
         TextView price;
 
-        ItemViewHolder(View itemView){
+        OnItemListener onItemListener;
+
+        ItemViewHolder(View itemView, OnItemListener onitemListener){
             super(itemView);
 
             picture = itemView.findViewById(R.id.ihPic);
             name = itemView.findViewById(R.id.ihName);
             price = itemView.findViewById(R.id.ihPrice);
+            this.onItemListener = onitemListener;
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            onItemListener.onItemClick(getAbsoluteAdapterPosition());
+        }
+    }
+
+    public interface OnItemListener{
+        void onItemClick(int position);
     }
 }
