@@ -1,6 +1,7 @@
 package de.dhbw.project.pcheap;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder>{
 
+    private static final String TAG = "ItemAdapter";
     List<Item> ItemList;
 
     public ItemAdapter(List<Item> itemList){ this.ItemList = itemList; }
@@ -44,6 +46,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         });
 
         Picasso.get().load(i.getImageUrl()).into(holder.picture);
+        Log.d(TAG, "onBindViewHolder: " + i.getImageUrl());
         holder.name.setText(i.getName());
         holder.price.setText(Double.toString(i.getPrice()));
     }

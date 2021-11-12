@@ -3,18 +3,41 @@ package de.dhbw.project.pcheap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Item implements Parcelable {
+    @SerializedName("image")
+    @Expose
     private String imageUrl;
+
+    @SerializedName("url")
+    @Expose
     private String siteUrl;
+
+    @SerializedName("name")
+    @Expose
     private String name;
+
+    @SerializedName("price")
+    @Expose
     private double price;
+
+    @SerializedName("description")
+    @Expose
     private String description;
+
+    @SerializedName("platform")
+    @Expose
     private String platform;
+
+    @SerializedName("history")
+    @Expose
     private Object[] history;
 
 
-    public Item(String iUrl, String Name, double Price, String sUrl,
-                String desc, String plat, Object[] history) {
+    public Item(String Name, double Price, String desc, String plat, String sUrl,
+                String iUrl, Object[] history) {
         this.setImageUrl(iUrl);
         this.setName(Name);
         this.setPrice(Price);
