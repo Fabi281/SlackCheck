@@ -1,4 +1,4 @@
-package de.dhbw.project.pcheap;
+package de.dhbw.project.pcheap.adapter;
 
 import android.content.Intent;
 import android.util.Log;
@@ -14,6 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import de.dhbw.project.pcheap.pojo.Item;
+import de.dhbw.project.pcheap.R;
+import de.dhbw.project.pcheap.activities.Details;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder>{
 
@@ -40,7 +44,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             @Override
             public void onClick(View view) {
                 Intent in = new Intent(view.getContext(), Details.class);
-                in.putExtra("object", i);
+                in.putExtra("item", i);
                 view.getContext().startActivity(in);
             }
         });

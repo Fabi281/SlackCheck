@@ -1,4 +1,4 @@
-package de.dhbw.project.pcheap;
+package de.dhbw.project.pcheap.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +10,10 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.dhbw.project.pcheap.pojo.Item;
+import de.dhbw.project.pcheap.adapter.ItemAdapter;
+import de.dhbw.project.pcheap.api.ItemRepo;
+import de.dhbw.project.pcheap.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

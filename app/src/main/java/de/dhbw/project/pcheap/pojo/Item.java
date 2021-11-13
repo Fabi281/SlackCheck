@@ -1,4 +1,4 @@
-package de.dhbw.project.pcheap;
+package de.dhbw.project.pcheap.pojo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
