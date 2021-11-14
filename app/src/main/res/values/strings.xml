@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PCheap</string>
+    <string name="alphabet">Alphabet</string>
+    <string name="price">Price</string>
 </resources>
