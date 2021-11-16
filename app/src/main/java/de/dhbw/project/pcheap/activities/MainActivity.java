@@ -2,8 +2,10 @@ package de.dhbw.project.pcheap.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import de.dhbw.project.pcheap.pojo.Item;
 import de.dhbw.project.pcheap.adapter.ItemAdapter;
@@ -25,11 +28,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Main";
     private List<Item> items = new ArrayList<>();
+    private List<Item> filteredItems = new ArrayList<>();
     private ItemAdapter adapter;
     private RecyclerView rv;
     private ItemRepo ir = new ItemRepo();
@@ -40,15 +43,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = findViewById(R.id.bar);
+        setSupportActionBar(toolbar);
+
         setupRecyclerView();
         loadData();
-
-        sortByPrice();
 
     }
 
     private void setupRecyclerView(){
-        adapter = new ItemAdapter(items);
+        adapter = new ItemAdapter(filteredItems);
         rv = findViewById(R.id.rvHits);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -61,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
                 if (response.isSuccessful()){
                     assert response.body() != null;
-                    items.addAll(response.body());
+                    filteredItems.addAll(response.body());
+                    items = filteredItems;
                     adapter.notifyDataSetChanged();
                 }else{
                     Log.d(TAG, "onResponse: fail");
@@ -79,7 +84,28 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = new MenuInflater(this);
         inflater.inflate(R.menu.menu, menu);
-        return true;
+
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setQueryHint("Search Data here...");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filteredItems = items.stream()
+                        .filter(i -> i.getName().toLowerCase().contains(newText.toLowerCase())).collect(Collectors.toList());
+                Log.d(TAG, filteredItems.toString());
+                adapter.changeList(filteredItems);
+                adapter.notifyDataSetChanged();
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -104,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 return item1.getName().compareTo(item2.getName());
             }
         };
-        Collections.sort(items, itemComparatorByName);
+        Collections.sort(filteredItems, itemComparatorByName);
         adapter.notifyDataSetChanged();
     }
 
@@ -116,9 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 return Double.compare(item1.getPrice(), item2.getPrice());
             }
         };
-        Collections.sort(items, itemComparatorByPrice);
+        Collections.sort(filteredItems, itemComparatorByPrice);
         adapter.notifyDataSetChanged();
     }
-
-
 }

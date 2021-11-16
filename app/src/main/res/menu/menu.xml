@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:title="Search"
+        android:showAsAction="ifRoom"
+        android:actionViewClass="androidx.appcompat.widget.SearchView" />
+
     <item
         android:id="@+id/SortAlph"
-        android:title="@string/alphabet" />
+        android:title="@string/alphabet"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/SortPrice"
-        android:title="@string/price" />
+        android:title="@string/price"
+        app:showAsAction="never"/>
+
 </menu>
