@@ -6,12 +6,21 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LabelFormatter;
+import com.jjoe64.graphview.Viewport;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.Arrays;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import de.dhbw.project.pcheap.R;
 import de.dhbw.project.pcheap.pojo.Item;
@@ -43,28 +52,36 @@ public class Details extends AppCompatActivity {
 
         ImageView imageView = findViewById(R.id.pic);
         Picasso.get().load(i.getImageUrl()).into(imageView);
-        JSONArray jsonArray = null;
 
+        JSONArray jsonArray = null;
         try {
             jsonArray = new JSONArray(i.getHistory());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        textView = (TextView) findViewById(R.id.growth);
-        try {
-            textView.setText(jsonArray.getJSONObject(0).get("growth").toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
+        GraphView graphView = findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+
+
+        for (int j = 0; j < jsonArray.length(); j++) {
+            DataPoint dp = null;
+            try {
+                dp = new DataPoint(
+                        new Date((long) (jsonArray.getJSONObject(j)
+                                .getDouble("timestamp") * 1000L)),
+                        jsonArray.getJSONObject(j)
+                                .getDouble("price"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            series.appendData(dp, true, jsonArray.length()+1);
         }
 
-        textView = (TextView) findViewById(R.id.timestamp);
-        try {
-            textView.setText(jsonArray.getJSONObject(0).get("timestamp").toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        graphView.addSeries(series);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d");
+        graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this, sdf));
+        graphView.getGridLabelRenderer().setNumHorizontalLabels(4);
     }
-
 }

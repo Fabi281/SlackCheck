@@ -59,26 +59,14 @@
         android:id="@+id/pic"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        app:layout_constraintBottom_toTopOf="@id/growth"
+        app:layout_constraintBottom_toTopOf="@id/graph"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/url" />
-    <TextView
-        android:id="@+id/growth"
+    <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="Growth"
-        app:layout_constraintBottom_toTopOf="@id/timestamp"
+        android:layout_height="200dip"
+        android:id="@+id/graph"
         app:layout_constraintTop_toBottomOf="@id/pic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-    <TextView
-        android:id="@+id/timestamp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="Timestamp"
-        app:layout_constraintTop_toBottomOf="@id/growth"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

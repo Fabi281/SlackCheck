@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         setupRecyclerView();
         loadData();
-
     }
 
     private void setupRecyclerView(){
@@ -60,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadData(){
         ir.getItems(new Callback<List<Item>>(){
-
             @Override
             public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
                 if (response.isSuccessful()){
