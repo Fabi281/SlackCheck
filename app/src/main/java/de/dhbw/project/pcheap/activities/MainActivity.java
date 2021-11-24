@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         setupRecyclerView();
-        loadData();
     }
 
     private void setupRecyclerView(){
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void loadData(){
+    private void loadData(String query, boolean newItems){
         ir.getItems(new Callback<List<Item>>(){
             @Override
             public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<List<Item>> call, Throwable t) {
                 Log.d(TAG, "onFailure: fail" + t.toString());
             }
-        });
+        }, query, newItems);
     }
 
     @Override
@@ -89,18 +88,13 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                loadData(query, false);
+                searchView.clearFocus();
                 return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                filteredItems = items.stream()
-                        .filter(i -> i.getName().toLowerCase().contains(newText.toLowerCase())).collect(Collectors.toList());
-                Log.d(TAG, filteredItems.toString());
-                adapter.changeList(filteredItems);
-                adapter.notifyDataSetChanged();
-                return true;
-            }
+            public boolean onQueryTextChange(String newText) { return true; }
         });
 
         return super.onCreateOptionsMenu(menu);

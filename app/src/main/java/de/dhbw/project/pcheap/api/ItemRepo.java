@@ -20,8 +20,8 @@ public class ItemRepo {
         itemApi = retrofit.create(ItemApi.class);
     }
 
-    public void getItems(Callback<List<Item>> callback){
-        Call<List<Item>> itemApiResultCall = itemApi.getItems();
+    public void getItems(Callback<List<Item>> callback, String query, boolean newItems){
+        Call<List<Item>> itemApiResultCall = itemApi.getItems(query, newItems);
         itemApiResultCall.enqueue(callback);
     }
 }
