@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import de.dhbw.project.pcheap.pojo.Item;
 import de.dhbw.project.pcheap.adapter.ItemAdapter;
@@ -31,7 +30,6 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Main";
-    private List<Item> items = new ArrayList<>();
     private List<Item> filteredItems = new ArrayList<>();
     private ItemAdapter adapter;
     private RecyclerView rv;
@@ -64,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
                     assert response.body() != null;
                     filteredItems.clear();
                     filteredItems.addAll(response.body());
-                    items = filteredItems;
                     adapter.notifyDataSetChanged();
                 }else{
                     Log.d(TAG, "onResponse: fail");
