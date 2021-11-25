@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
                 if (response.isSuccessful()){
                     assert response.body() != null;
+                    filteredItems.clear();
                     filteredItems.addAll(response.body());
                     items = filteredItems;
                     adapter.notifyDataSetChanged();

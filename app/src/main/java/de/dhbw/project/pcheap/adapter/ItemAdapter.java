@@ -26,10 +26,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     public ItemAdapter(List<Item> itemList){ this.ItemList = itemList; }
 
-    public void changeList(List<Item> itemList){
-        ItemList = itemList;
-    }
-
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
