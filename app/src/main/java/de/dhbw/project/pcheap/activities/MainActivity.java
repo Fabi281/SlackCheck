@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,10 +31,9 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Main";
-    private List<Item> filteredItems = new ArrayList<>();
+    private final List<Item> filteredItems = new ArrayList<>();
     private ItemAdapter adapter;
-    private RecyclerView rv;
-    private ItemRepo ir = new ItemRepo();
+    private final ItemRepo ir = new ItemRepo();
 
 
     @Override
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupRecyclerView(){
         adapter = new ItemAdapter(filteredItems);
-        rv = findViewById(R.id.rvHits);
+        RecyclerView rv = findViewById(R.id.rvHits);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadData(String query, boolean newItems){
         ir.getItems(new Callback<List<Item>>(){
             @Override
-            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
+            public void onResponse(@NonNull Call<List<Item>> call, @NonNull Response<List<Item>> response) {
                 if (response.isSuccessful()){
                     assert response.body() != null;
                     filteredItems.clear();
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Item>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Item>> call, @NonNull Throwable t) {
                 Log.d(TAG, "onFailure: fail" + t.toString());
             }
         }, query, newItems);
@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                findViewById(R.id.viewNoSearch).setVisibility(View.GONE);
+                findViewById(R.id.rvHits).setVisibility(View.VISIBLE);
                 loadData(query, false);
                 searchView.clearFocus();
                 return true;
@@ -120,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 return item1.getName().compareTo(item2.getName());
             }
         };
-        Collections.sort(filteredItems, itemComparatorByName);
+        filteredItems.sort(itemComparatorByName);
         adapter.notifyDataSetChanged();
     }
 
@@ -132,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 return Double.compare(item1.getPrice(), item2.getPrice());
             }
         };
-        Collections.sort(filteredItems, itemComparatorByPrice);
+        filteredItems.sort(itemComparatorByPrice);
         adapter.notifyDataSetChanged();
     }
 }

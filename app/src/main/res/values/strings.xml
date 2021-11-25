@@ -2,4 +2,5 @@
     <string name="app_name">PCheap</string>
     <string name="alphabet">Alphabet</string>
     <string name="price">Price</string>
+    <string name="search_to_start">To find the best prices, click on the looking glass above!</string>
 </resources>
