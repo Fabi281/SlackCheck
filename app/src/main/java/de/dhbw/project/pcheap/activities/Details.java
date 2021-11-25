@@ -1,7 +1,10 @@
 package de.dhbw.project.pcheap.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -76,12 +79,15 @@ public class Details extends AppCompatActivity {
         long maxDate = 0;
         double minPrice = Double.MAX_VALUE;
         double maxPrice = 0;
+        double growth = 0;
         for (int j = 0; j < jsonArray.length(); j++) {
             DataPoint dp = null;
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(j);
                 Date date = new Date(jsonObject.getLong("timestamp")*1000L);
                 double price = jsonObject.getDouble("price");
+                if (j == jsonArray.length()-1)
+                    growth = jsonObject.getDouble("growth");
                 minDate = Math.min(minDate, date.getTime());
                 maxDate = Math.max(maxDate, date.getTime());
                 minPrice = Math.min(minPrice, price);
@@ -107,11 +113,30 @@ public class Details extends AppCompatActivity {
         graphView.getViewport().setMinY(minPrice-yMargin);
         graphView.getViewport().setMaxY(maxPrice+yMargin);
 
+        if (growth < 0)
+            series.setColor(Color.GREEN);
+        else if (growth > 0)
+            series.setColor(Color.RED);
+        else
+            series.setColor(Color.YELLOW);
+
+
         graphView.addSeries(series);
 
-        graphView.getGridLabelRenderer().setHumanRounding(false);
+        graphView.getGridLabelRenderer().setHumanRounding(false, true);
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
         graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this, sdf));
         graphView.getGridLabelRenderer().setNumHorizontalLabels(3);
+
+
+
+        ImageView trendIndicator = findViewById(R.id.graph_trend_img);
+        if (growth < 0)
+            trendIndicator.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.arrow_down));
+        else if (growth > 0)
+            trendIndicator.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.arrow_up));
+        else
+            trendIndicator.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.arrow_flat));
+
     }
 }

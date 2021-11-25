@@ -62,6 +62,15 @@
         app:layout_constraintBottom_toTopOf="@id/graph"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/url" />
+    <ImageView
+        android:id="@+id/graph_trend_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/graph"
+        app:layout_constraintEnd_toEndOf="@+id/graph"
+        app:layout_constraintStart_toStartOf="@+id/graph"
+        app:layout_constraintTop_toTopOf="@+id/graph"
+        app:srcCompat="@drawable/arrow_flat" />
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
         android:layout_height="200dip"
@@ -69,8 +78,5 @@
         app:layout_constraintTop_toBottomOf="@id/pic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
