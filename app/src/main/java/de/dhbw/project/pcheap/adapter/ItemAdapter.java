@@ -11,10 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import de.dhbw.project.pcheap.pojo.DownloadImageTask;
 import de.dhbw.project.pcheap.pojo.Item;
 import de.dhbw.project.pcheap.R;
 import de.dhbw.project.pcheap.activities.Details;
@@ -39,17 +40,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         Item i = ItemList.get(position);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent in = new Intent(view.getContext(), Details.class);
-                in.putExtra("item", i);
-                view.getContext().startActivity(in);
-            }
+        holder.itemView.setOnClickListener(view -> {
+            Intent in = new Intent(view.getContext(), Details.class);
+            in.putExtra("item", i);
+            view.getContext().startActivity(in);
         });
 
-        Picasso.get().load(i.getImageUrl()).into(holder.picture);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new DownloadImageTask(holder.picture, i.getImageUrl()));
+
         Log.d(TAG, "onBindViewHolder: " + i.getImageUrl());
         holder.name.setText(i.getName());
         holder.price.setText(Double.toString(i.getPrice()));

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,8 +22,11 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.dhbw.project.pcheap.R;
+import de.dhbw.project.pcheap.pojo.DownloadImageTask;
 import de.dhbw.project.pcheap.pojo.Item;
 
 public class Details extends AppCompatActivity {
@@ -53,8 +54,8 @@ public class Details extends AppCompatActivity {
         textView = findViewById(R.id.url);
         textView.setText(i.getSiteUrl());
 
-        ImageView imageView = findViewById(R.id.pic);
-        Picasso.get().load(i.getImageUrl()).into(imageView);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new DownloadImageTask(findViewById(R.id.pic), i.getImageUrl()));
 
         setUpGraph(i);
     }
