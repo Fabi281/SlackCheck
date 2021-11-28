@@ -1,7 +1,6 @@
 package de.dhbw.project.pcheap.adapter;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -22,7 +22,6 @@ import de.dhbw.project.pcheap.activities.Details;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder>{
 
-    private static final String TAG = "ItemAdapter";
     List<Item> ItemList;
 
     public ItemAdapter(List<Item> itemList){ this.ItemList = itemList; }
@@ -47,9 +46,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         });
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(new DownloadImageTask(holder.picture, i.getImageUrl()));
+        // I have no idea why this works but i´ll never touch it again
+        try {
+            executor.submit(new DownloadImageTask(holder.picture, i.getImageUrl())).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        Log.d(TAG, "onBindViewHolder: " + i.getImageUrl());
+
         holder.name.setText(i.getName());
         holder.price.setText(Double.toString(i.getPrice()));
     }
