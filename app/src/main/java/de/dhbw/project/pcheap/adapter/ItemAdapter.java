@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,9 +22,9 @@ import de.dhbw.project.pcheap.activities.Details;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder>{
 
-    List<Item> ItemList;
+    ArrayList<Item> ItemList;
 
-    public ItemAdapter(List<Item> itemList){ this.ItemList = itemList; }
+    public ItemAdapter(ArrayList<Item> itemList){ this.ItemList = itemList; }
 
     @NonNull
     @Override
@@ -42,6 +42,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         holder.itemView.setOnClickListener(view -> {
             Intent in = new Intent(view.getContext(), Details.class);
             in.putExtra("item", i);
+            in.putParcelableArrayListExtra("itemList", ItemList);
+            in.putExtra("position", position);
             view.getContext().startActivity(in);
         });
 

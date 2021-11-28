@@ -30,7 +30,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Main";
-    private final List<Item> filteredItems = new ArrayList<>();
+    private final ArrayList<Item> filteredItems = new ArrayList<>();
     private ItemAdapter adapter;
     private final ItemRepo ir = new ItemRepo();
 
