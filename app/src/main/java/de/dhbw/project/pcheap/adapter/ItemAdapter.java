@@ -41,7 +41,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         holder.itemView.setOnClickListener(view -> {
             Intent in = new Intent(view.getContext(), Details.class);
-            in.putExtra("item", i);
             in.putParcelableArrayListExtra("itemList", ItemList);
             in.putExtra("position", position);
             view.getContext().startActivity(in);

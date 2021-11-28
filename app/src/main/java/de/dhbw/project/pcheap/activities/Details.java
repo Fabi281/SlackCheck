@@ -37,13 +37,17 @@ import de.dhbw.project.pcheap.pojo.Item;
 public class Details extends AppCompatActivity {
 
     SwipeListener swipeListener;
+    ArrayList<Item> itemList;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        Item i = getIntent().getParcelableExtra("item");
+        itemList = getIntent().getParcelableArrayListExtra("itemList");
+        position = getIntent().getIntExtra("position", 0);
+        Item i = itemList.get(position);
         swipeListener = new SwipeListener(findViewById(R.id.DetailLayout));
 
         TextView textView;
@@ -153,8 +157,6 @@ public class Details extends AppCompatActivity {
     private class SwipeListener implements View.OnTouchListener {
 
         GestureDetector gestureDetector;
-        ArrayList<Item> itemList = getIntent().getParcelableArrayListExtra("itemList");
-        int position = getIntent().getIntExtra("position", 0);
 
         SwipeListener(View v){
             int threshold = 100;
@@ -175,7 +177,6 @@ public class Details extends AppCompatActivity {
                                     if(xDiff > 0){
                                         if(position - 1 >= 0){
                                             Intent in = new Intent(v.getContext(), Details.class);
-                                            in.putExtra("item", itemList.get(position - 1));
                                             in.putParcelableArrayListExtra("itemList", itemList);
                                             in.putExtra("position", position - 1);
                                             v.getContext().startActivity(in);
@@ -184,7 +185,6 @@ public class Details extends AppCompatActivity {
                                     }else{
                                         if(position + 1 < itemList.size()){
                                             Intent in = new Intent(v.getContext(), Details.class);
-                                            in.putExtra("item", itemList.get(position + 1));
                                             in.putParcelableArrayListExtra("itemList", itemList);
                                             in.putExtra("position", position + 1);
                                             v.getContext().startActivity(in);
