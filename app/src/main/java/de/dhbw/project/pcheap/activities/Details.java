@@ -179,6 +179,7 @@ public class Details extends AppCompatActivity {
                                             Intent in = new Intent(v.getContext(), Details.class);
                                             in.putParcelableArrayListExtra("itemList", itemList);
                                             in.putExtra("position", position - 1);
+                                            in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                                             v.getContext().startActivity(in);
                                             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_left);
                                             return true;
@@ -188,6 +189,7 @@ public class Details extends AppCompatActivity {
                                             Intent in = new Intent(v.getContext(), Details.class);
                                             in.putParcelableArrayListExtra("itemList", itemList);
                                             in.putExtra("position", position + 1);
+                                            in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                                             v.getContext().startActivity(in);
                                             overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_right);
                                             return true;

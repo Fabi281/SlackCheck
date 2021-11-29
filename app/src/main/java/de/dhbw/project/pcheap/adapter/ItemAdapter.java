@@ -43,6 +43,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             Intent in = new Intent(view.getContext(), Details.class);
             in.putParcelableArrayListExtra("itemList", ItemList);
             in.putExtra("position", position);
+            in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             view.getContext().startActivity(in);
         });
 
