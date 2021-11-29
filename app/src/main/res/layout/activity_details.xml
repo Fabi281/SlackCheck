@@ -35,7 +35,6 @@
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:lines="3"
-            android:text="Name"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/price"
@@ -46,7 +45,6 @@
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,8 +58,9 @@
         android:layout_height="1dp"
         android:layout_marginTop="4dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/header_layout"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_layout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/shop_layout"
@@ -83,12 +82,12 @@
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:lines="1"
-            android:text="Platform"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/go_to_shop_btn"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Platform" />
 
         <Button
             android:id="@+id/go_to_shop_btn"
@@ -104,12 +103,13 @@
 
     <View
         android:id="@+id/divider2"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="4dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/shop_layout"
-        tools:layout_editor_absoluteX="1dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shop_layout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/describtion_layout"
@@ -152,8 +152,8 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="TextView"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    tools:text="@string/no_description" />
 
             </LinearLayout>
         </ScrollView>
@@ -161,12 +161,13 @@
 
     <View
         android:id="@+id/divider3"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginBottom="4dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toTopOf="@+id/graph_layout"
-        tools:layout_editor_absoluteX="1dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/graph_layout"
