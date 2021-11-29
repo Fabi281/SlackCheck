@@ -36,17 +36,6 @@ public class Item implements Parcelable {
     private Object[] history;
 
 
-    public Item(String Name, double Price, String desc, String plat, String sUrl,
-                String iUrl, Object[] history) {
-        this.setImageUrl(iUrl);
-        this.setName(Name);
-        this.setPrice(Price);
-        this.setSiteUrl(sUrl);
-        this.setDescription(desc);
-        this.setPlatform(plat);
-        this.setHistory(history);
-    }
-
     public String getSiteUrl() { return siteUrl; }
 
     public void setSiteUrl(String siteUrl) { this.siteUrl = siteUrl; }

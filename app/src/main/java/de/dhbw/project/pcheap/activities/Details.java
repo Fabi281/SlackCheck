@@ -3,9 +3,12 @@ package de.dhbw.project.pcheap.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,19 +28,31 @@ import org.json.JSONObject;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.dhbw.project.pcheap.R;
+import de.dhbw.project.pcheap.pojo.DownloadImageTask;
 import de.dhbw.project.pcheap.pojo.Item;
 
 public class Details extends AppCompatActivity {
+
+    SwipeListener swipeListener;
+    ArrayList<Item> itemList;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        Item i = getIntent().getParcelableExtra("item");
+
+        itemList = getIntent().getParcelableArrayListExtra("itemList");
+        position = getIntent().getIntExtra("position", 0);
+        Item i = itemList.get(position);
+        swipeListener = new SwipeListener(findViewById(R.id.DetailLayout));
 
         TextView textView;
 
@@ -56,8 +71,8 @@ public class Details extends AppCompatActivity {
         textView = findViewById(R.id.url);
         textView.setText(i.getSiteUrl());
 
-        ImageView imageView = findViewById(R.id.pic);
-        Picasso.get().load(i.getImageUrl()).into(imageView);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new DownloadImageTask(findViewById(R.id.pic), i.getImageUrl()));
 
         setUpGraph(i);
     }
@@ -147,7 +162,63 @@ public class Details extends AppCompatActivity {
         else
             trendIndicator.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.arrow_flat));
 
+    }
 
-        Toast.makeText(this, "Growth: " + Double.toString(accGrowth), Toast.LENGTH_SHORT).show();
+    private class SwipeListener implements View.OnTouchListener {
+
+        GestureDetector gestureDetector;
+
+        SwipeListener(View v){
+            int threshold = 100;
+            int velocity_threshold = 100;
+
+            GestureDetector.SimpleOnGestureListener listener =
+                    new GestureDetector.SimpleOnGestureListener(){
+                        @Override
+                        public boolean onDown(MotionEvent e){
+                          return true;
+                        }
+
+                        @Override
+                        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                            float xDiff = e2.getX() - e1.getX();
+                            try{
+                                if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold){
+                                    if(xDiff > 0){
+                                        if(position - 1 >= 0){
+                                            Intent in = new Intent(v.getContext(), Details.class);
+                                            in.putParcelableArrayListExtra("itemList", itemList);
+                                            in.putExtra("position", position - 1);
+                                            in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                            v.getContext().startActivity(in);
+                                            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_left);
+                                            return true;
+                                        }
+                                    }else{
+                                        if(position + 1 < itemList.size()){
+                                            Intent in = new Intent(v.getContext(), Details.class);
+                                            in.putParcelableArrayListExtra("itemList", itemList);
+                                            in.putExtra("position", position + 1);
+                                            in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                            v.getContext().startActivity(in);
+                                            overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_right);
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }catch(Exception e){
+                                e.printStackTrace();
+                            }
+                            return false;
+                        }
+                    };
+            gestureDetector = new GestureDetector(v.getContext(), listener);
+            v.setOnTouchListener(this);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return gestureDetector.onTouchEvent(event);
+        }
     }
 }

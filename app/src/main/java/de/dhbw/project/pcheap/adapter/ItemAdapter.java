@@ -1,7 +1,6 @@
 package de.dhbw.project.pcheap.adapter;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +10,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import java.util.List;
-
+import de.dhbw.project.pcheap.pojo.DownloadImageTask;
 import de.dhbw.project.pcheap.pojo.Item;
 import de.dhbw.project.pcheap.R;
 import de.dhbw.project.pcheap.activities.Details;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder>{
 
-    private static final String TAG = "ItemAdapter";
-    List<Item> ItemList;
+    ArrayList<Item> ItemList;
 
-    public ItemAdapter(List<Item> itemList){ this.ItemList = itemList; }
+    public ItemAdapter(ArrayList<Item> itemList){ this.ItemList = itemList; }
 
     @NonNull
     @Override
@@ -39,18 +39,23 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         Item i = ItemList.get(position);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent in = new Intent(view.getContext(), Details.class);
-                in.putExtra("item", i);
-                view.getContext().startActivity(in);
-            }
+        holder.itemView.setOnClickListener(view -> {
+            Intent in = new Intent(view.getContext(), Details.class);
+            in.putParcelableArrayListExtra("itemList", ItemList);
+            in.putExtra("position", position);
+            in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            view.getContext().startActivity(in);
         });
 
-        Picasso.get().load(i.getImageUrl()).into(holder.picture);
-        Log.d(TAG, "onBindViewHolder: " + i.getImageUrl());
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        // I have no idea why this works but i´ll never touch it again
+        try {
+            executor.submit(new DownloadImageTask(holder.picture, i.getImageUrl())).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
         holder.name.setText(i.getName());
         holder.price.setText(Double.toString(i.getPrice()));
     }

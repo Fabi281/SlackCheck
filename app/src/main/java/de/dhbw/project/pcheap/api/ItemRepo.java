@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ItemRepo {
 
-    private ItemApi itemApi;
+    private final ItemApi itemApi;
 
     public ItemRepo(){
         Retrofit retrofit = new Retrofit.Builder()
@@ -20,8 +20,8 @@ public class ItemRepo {
         itemApi = retrofit.create(ItemApi.class);
     }
 
-    public void getItems(Callback<List<Item>> callback, String query, boolean newItems){
-        Call<List<Item>> itemApiResultCall = itemApi.getItems(query, newItems);
+    public void getItems(Callback<List<Item>> callback, String query){
+        Call<List<Item>> itemApiResultCall = itemApi.getItems(query, false);
         itemApiResultCall.enqueue(callback);
     }
 }

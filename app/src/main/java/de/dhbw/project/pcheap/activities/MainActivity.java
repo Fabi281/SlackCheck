@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -31,7 +30,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Main";
-    private final List<Item> filteredItems = new ArrayList<>();
+    private final ArrayList<Item> filteredItems = new ArrayList<>();
     private ItemAdapter adapter;
     private final ItemRepo ir = new ItemRepo();
 
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void loadData(String query, boolean newItems){
+    private void loadData(String query){
         ir.getItems(new Callback<List<Item>>(){
             @Override
             public void onResponse(@NonNull Call<List<Item>> call, @NonNull Response<List<Item>> response) {
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.viewNoResults).setVisibility(View.VISIBLE);
                 Log.d(TAG, "onFailure: fail" + t.toString());
             }
-        }, query, newItems);
+        }, query);
     }
 
     @Override
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 findViewById(R.id.viewNoSearch).setVisibility(View.GONE);
                 findViewById(R.id.rvHits).setVisibility(View.VISIBLE);
-                loadData(query, false);
+                loadData(query);
                 searchView.clearFocus();
                 return true;
             }
@@ -107,8 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.SortAlph:
                 sortByName();
                 break;
@@ -116,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 sortByPrice();
                 break;
         }
+        adapter.notifyDataSetChanged();
         return true;
     }
 
@@ -128,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         filteredItems.sort(itemComparatorByName);
-        adapter.notifyDataSetChanged();
     }
 
     private void sortByPrice()
@@ -140,6 +138,5 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         filteredItems.sort(itemComparatorByPrice);
-        adapter.notifyDataSetChanged();
     }
 }

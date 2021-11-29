@@ -2,66 +2,69 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/DetailLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.Details">
 
+    <ImageView
+        android:id="@+id/pic"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:layout_width="180dp"
+        android:layout_height="80dp"
         android:text="Name"
-        app:layout_constraintBottom_toTopOf="@id/price"
+        android:textSize="30sp"
+        android:ellipsize="middle"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/pic" />
+
     <TextView
         android:id="@+id/price"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
         android:text="Price"
-        app:layout_constraintBottom_toTopOf="@id/description"
-        app:layout_constraintTop_toBottomOf="@id/name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textSize="30sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/name"
+        app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
         android:text="Description"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@id/platform"
-        app:layout_constraintTop_toBottomOf="@id/price"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/price" />
+
     <TextView
         android:id="@+id/platform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
         android:text="Platform"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@id/url"
-        app:layout_constraintTop_toBottomOf="@id/description"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/description" />
+
     <TextView
         android:id="@+id/url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
         android:text="Url"
-        app:layout_constraintTop_toBottomOf="@id/platform"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-    <ImageView
-        android:id="@+id/pic"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        app:layout_constraintBottom_toTopOf="@id/graph"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/url" />
+        app:layout_constraintTop_toBottomOf="@id/platform" />
+
     <ImageView
         android:id="@+id/graph_trend_img"
         android:layout_width="0dp"
@@ -71,12 +74,13 @@
         app:layout_constraintStart_toStartOf="@+id/graph"
         app:layout_constraintTop_toTopOf="@+id/graph"
         app:srcCompat="@drawable/arrow_flat" />
+
     <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
         android:layout_width="match_parent"
         android:layout_height="200dip"
-        android:id="@+id/graph"
-        app:layout_constraintTop_toBottomOf="@id/pic"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/url" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
