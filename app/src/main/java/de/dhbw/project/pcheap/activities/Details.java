@@ -13,7 +13,10 @@ import android.widget.Toast;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -79,15 +82,14 @@ public class Details extends AppCompatActivity {
         long maxDate = 0;
         double minPrice = Double.MAX_VALUE;
         double maxPrice = 0;
-        double growth = 0;
+        double accGrowth = 1;
         for (int j = 0; j < jsonArray.length(); j++) {
             DataPoint dp = null;
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(j);
                 Date date = new Date(jsonObject.getLong("timestamp")*1000L);
                 double price = jsonObject.getDouble("price");
-                if (j == jsonArray.length()-1)
-                    growth = jsonObject.getDouble("growth");
+                accGrowth *= jsonObject.getDouble("growth");
                 minDate = Math.min(minDate, date.getTime());
                 maxDate = Math.max(maxDate, date.getTime());
                 minPrice = Math.min(minPrice, price);
@@ -103,6 +105,23 @@ public class Details extends AppCompatActivity {
         series.setDataPointsRadius(10);
         series.setThickness(8);
 
+        series.setOnDataPointTapListener(new OnDataPointTapListener() {
+            @Override
+            public void onTap(Series series, DataPointInterface dataPoint) {
+                Toast.makeText(getApplicationContext(), dataPoint.getY()+"€", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        if (accGrowth < 1)
+            series.setColor(Color.GREEN);
+        else if (accGrowth > 1)
+            series.setColor(Color.RED);
+        else
+            series.setColor(Color.YELLOW);
+
+
+        graphView.addSeries(series);
+
         // set viewport to contain everything
         graphView.getViewport().setXAxisBoundsManual(true);
         graphView.getViewport().setYAxisBoundsManual(true);
@@ -113,16 +132,6 @@ public class Details extends AppCompatActivity {
         graphView.getViewport().setMinY(minPrice-yMargin);
         graphView.getViewport().setMaxY(maxPrice+yMargin);
 
-        if (growth < 0)
-            series.setColor(Color.GREEN);
-        else if (growth > 0)
-            series.setColor(Color.RED);
-        else
-            series.setColor(Color.YELLOW);
-
-
-        graphView.addSeries(series);
-
         graphView.getGridLabelRenderer().setHumanRounding(false, true);
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
         graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this, sdf));
@@ -131,12 +140,14 @@ public class Details extends AppCompatActivity {
 
 
         ImageView trendIndicator = findViewById(R.id.graph_trend_img);
-        if (growth < 0)
+        if (accGrowth < 1)
             trendIndicator.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.arrow_down));
-        else if (growth > 0)
+        else if (accGrowth > 1)
             trendIndicator.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.arrow_up));
         else
             trendIndicator.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.arrow_flat));
 
+
+        Toast.makeText(this, "Growth: " + Double.toString(accGrowth), Toast.LENGTH_SHORT).show();
     }
 }
