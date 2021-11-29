@@ -3,4 +3,6 @@
     <string name="alphabet">Alphabet</string>
     <string name="price">Price</string>
     <string name="search_to_start">To find the best prices, click on the looking glass above!</string>
+    <string name="no_results_title">We couldn\'t find anything.</string>
+    <string name="no_results_subtext">Check your internet connection or search for something else.</string>
 </resources>

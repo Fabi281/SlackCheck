@@ -58,18 +58,23 @@ public class MainActivity extends AppCompatActivity {
         ir.getItems(new Callback<List<Item>>(){
             @Override
             public void onResponse(@NonNull Call<List<Item>> call, @NonNull Response<List<Item>> response) {
-                if (response.isSuccessful()){
-                    assert response.body() != null;
+                if (response.isSuccessful() && response.body() != null){
+                    findViewById(R.id.rvHits).setVisibility(View.VISIBLE);
+                    findViewById(R.id.viewNoResults).setVisibility(View.GONE);
                     filteredItems.clear();
                     filteredItems.addAll(response.body());
                     adapter.notifyDataSetChanged();
                 }else{
                     Log.d(TAG, "onResponse: fail");
+                    findViewById(R.id.rvHits).setVisibility(View.GONE);
+                    findViewById(R.id.viewNoResults).setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Item>> call, @NonNull Throwable t) {
+                findViewById(R.id.rvHits).setVisibility(View.GONE);
+                findViewById(R.id.viewNoResults).setVisibility(View.VISIBLE);
                 Log.d(TAG, "onFailure: fail" + t.toString());
             }
         }, query, newItems);
