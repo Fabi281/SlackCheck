@@ -180,6 +180,7 @@ public class Details extends AppCompatActivity {
                                             in.putParcelableArrayListExtra("itemList", itemList);
                                             in.putExtra("position", position - 1);
                                             v.getContext().startActivity(in);
+                                            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_left);
                                             return true;
                                         }
                                     }else{
@@ -188,6 +189,7 @@ public class Details extends AppCompatActivity {
                                             in.putParcelableArrayListExtra("itemList", itemList);
                                             in.putExtra("position", position + 1);
                                             v.getContext().startActivity(in);
+                                            overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_right);
                                             return true;
                                         }
                                     }
