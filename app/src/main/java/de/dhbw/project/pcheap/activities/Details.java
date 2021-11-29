@@ -20,7 +20,6 @@ import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.Series;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +42,7 @@ public class Details extends AppCompatActivity {
     SwipeListener swipeListener;
     ArrayList<Item> itemList;
     int position;
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +60,25 @@ public class Details extends AppCompatActivity {
         textView.setText(i.getName());
 
         textView = findViewById(R.id.price);
-        textView.setText(Double.toString(i.getPrice()));
+        textView.setText(Double.toString(i.getPrice())+"€");
 
         textView = findViewById(R.id.description);
-        textView.setText(i.getDescription());
+        String description = i.getDescription();
+        if(description == null || description.length() == 0)
+            textView.setText(R.string.no_description);
+        else
+            textView.setText(description);
 
         textView = findViewById(R.id.platform);
         textView.setText(i.getPlatform());
 
-        textView = findViewById(R.id.url);
-        textView.setText(i.getSiteUrl());
+        url = i.getSiteUrl();
+
+        findViewById(R.id.go_to_shop_btn).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(android.net.Uri.parse(url));
+            startActivity(intent);
+        });
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(new DownloadImageTask(findViewById(R.id.pic), i.getImageUrl()));

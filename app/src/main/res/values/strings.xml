@@ -5,4 +5,8 @@
     <string name="search_to_start">To find the best prices, click on the looking glass above!</string>
     <string name="no_results_title">We couldn\'t find anything.</string>
     <string name="no_results_subtext">Check your internet connection or search for something else.</string>
+    <string name="description_label">Description</string>
+    <string name="go_to_shop">Buy</string>
+    <string name="price_history">Price history</string>
+    <string name="no_description">No description available</string>
 </resources>
