@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/DetailLayout"
+    android:foregroundTint="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="#66FFFFFF"
@@ -60,6 +61,21 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.4" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- This initially-hidden ImageView will hold the expanded/zoomed version of
+         the images above.
+         -->
+    <ImageView
+        android:id="@+id/expanded_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:contentDescription="@string/product_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <View
         android:id="@+id/divider1"
