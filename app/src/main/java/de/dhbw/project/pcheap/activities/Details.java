@@ -57,7 +57,7 @@ public class Details extends AppCompatActivity {
         textView.setText(i.getName());
 
         textView = findViewById(R.id.price);
-        textView.setText(i.getPrice() + "€");
+        textView.setText(String.format(getResources().getString(R.string.formatted_price), i.getPrice()));
 
         textView = findViewById(R.id.description);
         String description = i.getDescription();
@@ -221,6 +221,7 @@ public class Details extends AppCompatActivity {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            v.performClick();
             return gestureDetector.onTouchEvent(event);
         }
     }
