@@ -13,4 +13,5 @@
     <string name="product_image">Product Image</string>
     <string name="trendIndicator">Trend Indicator</string>
     <string name="app_logo">App Logo</string>
+    <string name="formatted_price">%1$.2f €</string>
 </resources>
