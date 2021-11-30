@@ -1,6 +1,10 @@
 package de.dhbw.project.pcheap.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +27,12 @@ import de.dhbw.project.pcheap.activities.Details;
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder>{
 
     ArrayList<Item> ItemList;
+    private final Context context;
 
-    public ItemAdapter(ArrayList<Item> itemList){ this.ItemList = itemList; }
+    public ItemAdapter(ArrayList<Item> itemList, Context context){
+        this.ItemList = itemList;
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -44,7 +52,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             in.putParcelableArrayListExtra("itemList", ItemList);
             in.putExtra("position", position);
             in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            view.getContext().startActivity(in);
+
+            ActivityOptions options =
+                    ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext(),
+                            Pair.create(view.findViewById(R.id.ihPic), "imageTransition"),
+                            Pair.create(view.findViewById(R.id.ihName), "nameTransition"),
+                            Pair.create(view.findViewById(R.id.ihPrice), "priceTransition"));
+
+            view.getContext().startActivity(in, options.toBundle());
         });
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -57,7 +72,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
 
         holder.name.setText(i.getName());
-        holder.price.setText(Double.toString(i.getPrice()));
+        holder.price.setText(String.format(
+                context.getResources().getString(R.string.formatted_price),
+                i.getPrice()));
     }
 
     @Override

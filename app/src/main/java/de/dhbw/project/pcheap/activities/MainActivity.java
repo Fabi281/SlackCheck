@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(){
-        adapter = new ItemAdapter(filteredItems);
+        adapter = new ItemAdapter(filteredItems, this);
         RecyclerView rv = findViewById(R.id.rvHits);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
