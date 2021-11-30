@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.service.autofill.FillEventHistory;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -349,5 +350,71 @@ public class Details extends AppCompatActivity {
             set1.start();
             animator = set1;
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(findViewById(R.id.expanded_image).getVisibility() == View.VISIBLE){
+            final Rect startBounds = new Rect();
+            final Rect finalBounds = new Rect();
+
+            ImageView largeImageView = findViewById(R.id.expanded_image);
+            ImageView smallImageView = findViewById(R.id.pic);
+
+            smallImageView.getGlobalVisibleRect(startBounds);
+            findViewById(R.id.DetailLayout).getGlobalVisibleRect(finalBounds);
+
+            float startScale;
+            if ((float) finalBounds.width() / finalBounds.height()
+                    > (float) startBounds.width() / startBounds.height()) {
+
+                startScale = (float) startBounds.height() / finalBounds.height();
+                float startWidth = startScale * finalBounds.width();
+                float deltaWidth = (startWidth - startBounds.width()) / 2;
+                startBounds.left -= deltaWidth;
+                startBounds.right += deltaWidth;
+            } else {
+
+                startScale = (float) startBounds.width() / finalBounds.width();
+                float startHeight = startScale * finalBounds.height();
+                float deltaHeight = (startHeight - startBounds.height()) / 2;
+                startBounds.top -= deltaHeight;
+                startBounds.bottom += deltaHeight;
+            }
+
+            AnimatorSet set1 = new AnimatorSet();
+            set1.play(ObjectAnimator
+                    .ofFloat(largeImageView, View.X, startBounds.left))
+                    .with(ObjectAnimator
+                            .ofFloat(largeImageView,
+                                    View.Y,startBounds.top))
+                    .with(ObjectAnimator
+                            .ofFloat(largeImageView,
+                                    View.SCALE_X, startScale))
+                    .with(ObjectAnimator
+                            .ofFloat(largeImageView,
+                                    View.SCALE_Y, startScale));
+            set1.setDuration(animationDuration);
+            set1.setInterpolator(new DecelerateInterpolator());
+            set1.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    smallImageView.setAlpha(0.4f);
+                    largeImageView.setVisibility(View.GONE);
+                    animator = null;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    smallImageView.setAlpha(0.4f);
+                    largeImageView.setVisibility(View.GONE);
+                    animator = null;
+                }
+            });
+            set1.start();
+            animator = set1;
+        }else{
+            this.finish();
+        }
     }
 }
