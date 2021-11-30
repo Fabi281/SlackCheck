@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.service.autofill.FillEventHistory;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -316,8 +315,6 @@ public class Details extends AppCompatActivity {
                 animator.cancel();
             }
 
-            // Animate the four positioning/sizing properties in parallel,
-            // back to their original values.
             AnimatorSet set1 = new AnimatorSet();
             set1.play(ObjectAnimator
                     .ofFloat(largeImageView, View.X, startBounds.left))
