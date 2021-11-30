@@ -16,10 +16,7 @@ import android.widget.Toast;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.OnDataPointTapListener;
-import com.jjoe64.graphview.series.Series;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,11 +57,11 @@ public class Details extends AppCompatActivity {
         textView.setText(i.getName());
 
         textView = findViewById(R.id.price);
-        textView.setText(Double.toString(i.getPrice())+"€");
+        textView.setText(i.getPrice() + "€");
 
         textView = findViewById(R.id.description);
         String description = i.getDescription();
-        if(description == null || description.length() == 0)
+        if (description == null || description.length() == 0)
             textView.setText(R.string.no_description);
         else
             textView.setText(description);
@@ -82,11 +79,12 @@ public class Details extends AppCompatActivity {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(new DownloadImageTask(findViewById(R.id.pic), i.getImageUrl()));
+        findViewById(R.id.pic).setAlpha(0.4f);
 
         setUpGraph(i);
     }
 
-    private void setUpGraph(Item i){
+    private void setUpGraph(Item i) {
         JSONArray jsonArray = null;
         try {
             jsonArray = new JSONArray(i.getHistory());
@@ -111,7 +109,7 @@ public class Details extends AppCompatActivity {
             DataPoint dp = null;
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(j);
-                Date date = new Date(jsonObject.getLong("timestamp")*1000L);
+                Date date = new Date(jsonObject.getLong("timestamp") * 1000L);
                 double price = jsonObject.getDouble("price");
                 accGrowth *= jsonObject.getDouble("growth");
                 minDate = Math.min(minDate, date.getTime());
@@ -122,19 +120,16 @@ public class Details extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            series.appendData(dp, true, jsonArray.length()+1);
+            series.appendData(dp, true, jsonArray.length() + 1);
         }
 
         series.setDrawDataPoints(true);
         series.setDataPointsRadius(10);
         series.setThickness(8);
 
-        series.setOnDataPointTapListener(new OnDataPointTapListener() {
-            @Override
-            public void onTap(Series series, DataPointInterface dataPoint) {
-                Toast.makeText(getApplicationContext(), dataPoint.getY()+"€", Toast.LENGTH_SHORT).show();
-            }
-        });
+        series.setOnDataPointTapListener(
+                (series1, dataPoint) -> Toast.makeText(getApplicationContext(),
+                dataPoint.getY() + "€", Toast.LENGTH_SHORT).show());
 
         if (accGrowth < 1)
             series.setColor(Color.GREEN);
@@ -149,18 +144,17 @@ public class Details extends AppCompatActivity {
         // set viewport to contain everything
         graphView.getViewport().setXAxisBoundsManual(true);
         graphView.getViewport().setYAxisBoundsManual(true);
-        double xMargin = (maxDate-minDate)/5.;
-        double yMargin = (maxPrice-minPrice)/5.;
-        graphView.getViewport().setMinX(minDate-xMargin);
-        graphView.getViewport().setMaxX(maxDate+xMargin);
-        graphView.getViewport().setMinY(minPrice-yMargin);
-        graphView.getViewport().setMaxY(maxPrice+yMargin);
+        double xMargin = (maxDate - minDate) / 5.;
+        double yMargin = (maxPrice - minPrice) / 5.;
+        graphView.getViewport().setMinX(minDate - xMargin);
+        graphView.getViewport().setMaxX(maxDate + xMargin);
+        graphView.getViewport().setMinY(minPrice - yMargin);
+        graphView.getViewport().setMaxY(maxPrice + yMargin);
 
         graphView.getGridLabelRenderer().setHumanRounding(false, true);
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
         graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this, sdf));
         graphView.getGridLabelRenderer().setNumHorizontalLabels(3);
-
 
 
         ImageView trendIndicator = findViewById(R.id.graph_trend_img);
@@ -177,24 +171,24 @@ public class Details extends AppCompatActivity {
 
         GestureDetector gestureDetector;
 
-        SwipeListener(View v){
+        SwipeListener(View v) {
             int threshold = 100;
             int velocity_threshold = 100;
 
             GestureDetector.SimpleOnGestureListener listener =
-                    new GestureDetector.SimpleOnGestureListener(){
+                    new GestureDetector.SimpleOnGestureListener() {
                         @Override
-                        public boolean onDown(MotionEvent e){
-                          return true;
+                        public boolean onDown(MotionEvent e) {
+                            return true;
                         }
 
                         @Override
                         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                             float xDiff = e2.getX() - e1.getX();
-                            try{
-                                if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold){
-                                    if(xDiff > 0){
-                                        if(position - 1 >= 0){
+                            try {
+                                if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold) {
+                                    if (xDiff > 0) {
+                                        if (position - 1 >= 0) {
                                             Intent in = new Intent(v.getContext(), Details.class);
                                             in.putParcelableArrayListExtra("itemList", itemList);
                                             in.putExtra("position", position - 1);
@@ -203,8 +197,8 @@ public class Details extends AppCompatActivity {
                                             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_left);
                                             return true;
                                         }
-                                    }else{
-                                        if(position + 1 < itemList.size()){
+                                    } else {
+                                        if (position + 1 < itemList.size()) {
                                             Intent in = new Intent(v.getContext(), Details.class);
                                             in.putParcelableArrayListExtra("itemList", itemList);
                                             in.putExtra("position", position + 1);
@@ -215,7 +209,7 @@ public class Details extends AppCompatActivity {
                                         }
                                     }
                                 }
-                            }catch(Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             return false;

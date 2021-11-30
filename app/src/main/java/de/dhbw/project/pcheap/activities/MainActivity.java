@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     findViewById(R.id.viewNoResults).setVisibility(View.GONE);
                     filteredItems.clear();
                     filteredItems.addAll(response.body());
-                    adapter.notifyDataSetChanged();
+                    sortByPrice();
                 }else{
                     Log.d(TAG, "onResponse: fail");
                     findViewById(R.id.rvHits).setVisibility(View.GONE);
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onFailure: fail" + t.toString());
             }
         }, query);
+
     }
 
     @Override
@@ -106,37 +108,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.SortAlph:
-                sortByName();
-                break;
-            case R.id.SortPrice:
-                sortByPrice();
-                break;
-        }
-        adapter.notifyDataSetChanged();
+        if(item.getItemId() == R.id.SortAlpha)
+            sortByName();
+        if(item.getItemId() == R.id.SortPrice)
+            sortByPrice();
         return true;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void sortByName()
     {
-        Comparator<Item> itemComparatorByName = new Comparator<Item>() {
-            @Override
-            public int compare(Item item1, Item item2) {
-                return item1.getName().compareTo(item2.getName());
-            }
-        };
+        Comparator<Item> itemComparatorByName = Comparator.comparing(Item::getName);
         filteredItems.sort(itemComparatorByName);
+        adapter.notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void sortByPrice()
     {
-        Comparator<Item> itemComparatorByPrice = new Comparator<Item>() {
-            @Override
-            public int compare(Item item1, Item item2) {
-                return Double.compare(item1.getPrice(), item2.getPrice());
-            }
-        };
+        Comparator<Item> itemComparatorByPrice = Comparator.comparingDouble(Item::getPrice);
         filteredItems.sort(itemComparatorByPrice);
+        adapter.notifyDataSetChanged();
     }
 }
