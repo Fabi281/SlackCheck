@@ -59,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<Item>> call, @NonNull Response<List<Item>> response) {
                 if (response.isSuccessful() && response.body() != null){
-                    findViewById(R.id.rvHits).setVisibility(View.VISIBLE);
-                    findViewById(R.id.viewNoResults).setVisibility(View.GONE);
                     filteredItems.clear();
                     filteredItems.addAll(response.body());
                     sortByPrice();
+                    findViewById(R.id.loading_layout).setVisibility(View.GONE);
+                    findViewById(R.id.rvHits).setVisibility(View.VISIBLE);
                 }else{
                     Log.d(TAG, "onResponse: fail");
                     findViewById(R.id.rvHits).setVisibility(View.GONE);
@@ -92,8 +92,9 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                findViewById(R.id.rvHits).setVisibility(View.GONE);
                 findViewById(R.id.viewNoSearch).setVisibility(View.GONE);
-                findViewById(R.id.rvHits).setVisibility(View.VISIBLE);
+                findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
                 loadData(query);
                 searchView.clearFocus();
                 return true;
