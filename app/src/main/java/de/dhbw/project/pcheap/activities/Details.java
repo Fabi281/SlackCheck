@@ -170,7 +170,9 @@ public class Details extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
         graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this, sdf));
         graphView.getGridLabelRenderer().setNumHorizontalLabels(3);
-
+        graphView.getGridLabelRenderer().setGridColor(getColor(R.color.black));
+        graphView.getGridLabelRenderer().setHorizontalLabelsColor(getColor(R.color.black));
+        graphView.getGridLabelRenderer().setVerticalLabelsColor(getColor(R.color.black));
 
         ImageView trendIndicator = findViewById(R.id.graph_trend_img);
         if (accGrowth < 1)
