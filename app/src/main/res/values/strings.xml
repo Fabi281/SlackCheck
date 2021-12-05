@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PCheap</string>
+    <string name="app_name" translatable="false">PCheap</string>
     <string name="alphabet">Alphabet</string>
     <string name="price">Price</string>
     <string name="search_to_start">To find the best prices, click on the looking glass above!</string>
@@ -15,4 +15,5 @@
     <string name="app_logo">App Logo</string>
     <string name="formatted_price">%1$.2f €</string>
     <string name="loading">Loading…</string>
+    <string name="queryhint">Search Items here…</string>
 </resources>
