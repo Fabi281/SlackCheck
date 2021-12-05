@@ -9,6 +9,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -169,7 +170,9 @@ public class Details extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
         graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this, sdf));
         graphView.getGridLabelRenderer().setNumHorizontalLabels(3);
-
+        graphView.getGridLabelRenderer().setGridColor(getColor(R.color.black));
+        graphView.getGridLabelRenderer().setHorizontalLabelsColor(getColor(R.color.black));
+        graphView.getGridLabelRenderer().setVerticalLabelsColor(getColor(R.color.black));
 
         ImageView trendIndicator = findViewById(R.id.graph_trend_img);
         if (accGrowth < 1)
@@ -241,35 +244,45 @@ public class Details extends AppCompatActivity {
     }
 
     private void zoomImage(ImageView smallImageView, String imageUrl){
+        // If there are any animations playing right now, cancel them to prevent weird interactions
         if(animator != null) {
             animator.cancel();
         }
 
+        //Load the Image into the expanded imageView and bring it to the front
         ImageView largeImageView = findViewById(R.id.expanded_image);
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(new DownloadImageTask(largeImageView, imageUrl));
-
         largeImageView.bringToFront();
 
+        largeImageView.getBackground().setTint(getColor(R.color.tint));
+
+        // Set Bounds for start and end of Animation
         final Rect startBounds = new Rect();
         final Rect finalBounds = new Rect();
-
+        final Point globalOffset = new Point();
 
         smallImageView.getGlobalVisibleRect(startBounds);
-        findViewById(R.id.DetailLayout).getGlobalVisibleRect(finalBounds);
+        findViewById(R.id.DetailLayout).getGlobalVisibleRect(finalBounds, globalOffset);
+
+        //Needed to counteract the offset otherwise the background wouldn't fill the entire screen
+        startBounds.offset(-globalOffset.x, -globalOffset.y);
+        finalBounds.offset(-globalOffset.x, -globalOffset.y);
 
 
+        // Set Start bounds to the fit the aspect ratio using
+        // the center-crop technique to prevent stretching
         float startScale;
         if ((float) finalBounds.width() / finalBounds.height()
                 > (float) startBounds.width() / startBounds.height()) {
-
+            // Extend start bounds horizontally
             startScale = (float) startBounds.height() / finalBounds.height();
             float startWidth = startScale * finalBounds.width();
             float deltaWidth = (startWidth - startBounds.width()) / 2;
             startBounds.left -= deltaWidth;
             startBounds.right += deltaWidth;
         } else {
-
+            // Extend start bounds vertically
             startScale = (float) startBounds.width() / finalBounds.width();
             float startHeight = startScale * finalBounds.height();
             float deltaHeight = (startHeight - startBounds.height()) / 2;
@@ -277,12 +290,17 @@ public class Details extends AppCompatActivity {
             startBounds.bottom += deltaHeight;
         }
 
+        //Make the small imageView invisible and expanded imageView visible
         smallImageView.setAlpha(0f);
         largeImageView.setVisibility(View.VISIBLE);
 
+        //Set the Pivot to the top-left corner otherwise the animation starts in the middle
         largeImageView.setPivotX(0f);
         largeImageView.setPivotY(0f);
 
+        //Start the Animation of moving/enlarging the Image from startBounds to endBounds
+        //and set parameters like duration and the interpolator (start quick and slow down for a
+        //more realistic feel)
         AnimatorSet set = new AnimatorSet();
         set
                 .play(ObjectAnimator.ofFloat(largeImageView, View.X,
@@ -309,14 +327,13 @@ public class Details extends AppCompatActivity {
         set.start();
         animator = set;
 
+        // Do basically the same thing the other way around
         final float startScaleFinal = startScale;
         largeImageView.setOnClickListener(view -> {
             if (animator != null) {
                 animator.cancel();
             }
 
-            // Animate the four positioning/sizing properties in parallel,
-            // back to their original values.
             AnimatorSet set1 = new AnimatorSet();
             set1.play(ObjectAnimator
                     .ofFloat(largeImageView, View.X, startBounds.left))
@@ -334,6 +351,7 @@ public class Details extends AppCompatActivity {
             set1.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
+                    largeImageView.getBackground().setTint(getColor(R.color.white));
                     smallImageView.setAlpha(0.4f);
                     largeImageView.setVisibility(View.GONE);
                     animator = null;
@@ -341,6 +359,7 @@ public class Details extends AppCompatActivity {
 
                 @Override
                 public void onAnimationCancel(Animator animation) {
+                    largeImageView.getBackground().setTint(getColor(R.color.white));
                     smallImageView.setAlpha(0.4f);
                     largeImageView.setVisibility(View.GONE);
                     animator = null;
@@ -349,5 +368,74 @@ public class Details extends AppCompatActivity {
             set1.start();
             animator = set1;
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Zoom out if the enlarged image is visible and finish the Activity if it is not
+        if(findViewById(R.id.expanded_image).getVisibility() == View.VISIBLE){
+            final Rect startBounds = new Rect();
+            final Rect finalBounds = new Rect();
+
+            ImageView largeImageView = findViewById(R.id.expanded_image);
+            ImageView smallImageView = findViewById(R.id.pic);
+
+            smallImageView.getGlobalVisibleRect(startBounds);
+            findViewById(R.id.DetailLayout).getGlobalVisibleRect(finalBounds);
+
+            float startScale;
+            if ((float) finalBounds.width() / finalBounds.height()
+                    > (float) startBounds.width() / startBounds.height()) {
+
+                startScale = (float) startBounds.height() / finalBounds.height();
+                float startWidth = startScale * finalBounds.width();
+                float deltaWidth = (startWidth - startBounds.width()) / 2;
+                startBounds.left -= deltaWidth;
+                startBounds.right += deltaWidth;
+            } else {
+
+                startScale = (float) startBounds.width() / finalBounds.width();
+                float startHeight = startScale * finalBounds.height();
+                float deltaHeight = (startHeight - startBounds.height()) / 2;
+                startBounds.top -= deltaHeight;
+                startBounds.bottom += deltaHeight;
+            }
+
+            AnimatorSet set1 = new AnimatorSet();
+            set1.play(ObjectAnimator
+                    .ofFloat(largeImageView, View.X, startBounds.left))
+                    .with(ObjectAnimator
+                            .ofFloat(largeImageView,
+                                    View.Y,startBounds.top))
+                    .with(ObjectAnimator
+                            .ofFloat(largeImageView,
+                                    View.SCALE_X, startScale))
+                    .with(ObjectAnimator
+                            .ofFloat(largeImageView,
+                                    View.SCALE_Y, startScale));
+            set1.setDuration(animationDuration);
+            set1.setInterpolator(new DecelerateInterpolator());
+            set1.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    largeImageView.getBackground().setTint(getColor(R.color.white));
+                    smallImageView.setAlpha(0.4f);
+                    largeImageView.setVisibility(View.GONE);
+                    animator = null;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    largeImageView.getBackground().setTint(getColor(R.color.white));
+                    smallImageView.setAlpha(0.4f);
+                    largeImageView.setVisibility(View.GONE);
+                    animator = null;
+                }
+            });
+            set1.start();
+            animator = set1;
+        }else{
+            this.finish();
+        }
     }
 }

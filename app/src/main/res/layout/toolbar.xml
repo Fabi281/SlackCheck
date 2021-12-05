@@ -6,6 +6,6 @@
     android:background="@color/oxford_blue"
     android:elevation="4dp"
     android:theme="@style/Theme.PCheap"
-    app:popupTheme="@style/Theme.PCheap">
+    app:popupTheme="@style/Theme.AppCompat.DayNight">
 
 </androidx.appcompat.widget.Toolbar>
