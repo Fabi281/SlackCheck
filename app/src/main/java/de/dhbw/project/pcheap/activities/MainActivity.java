@@ -1,13 +1,5 @@
 package de.dhbw.project.pcheap.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,14 +8,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import de.dhbw.project.pcheap.pojo.Item;
+import de.dhbw.project.pcheap.R;
 import de.dhbw.project.pcheap.adapter.ItemAdapter;
 import de.dhbw.project.pcheap.api.ItemRepo;
-import de.dhbw.project.pcheap.R;
+import de.dhbw.project.pcheap.pojo.Item;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -87,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu, menu);
 
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setQueryHint(getString(R.string.queryhint));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

@@ -2,9 +2,17 @@ package de.dhbw.project.pcheap.pojo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.ImageView;
+
+import androidx.databinding.BindingAdapter;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Locale;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Item implements Parcelable {
     @SerializedName("image")
@@ -62,6 +70,8 @@ public class Item implements Parcelable {
 
     public double getPrice() { return price; }
 
+    public String getFormattedPrice() { return String.format(Locale.getDefault(), "%.2f €", price); }
+
     public void setPrice(double price) { this.price = price; }
 
     @Override
@@ -101,4 +111,15 @@ public class Item implements Parcelable {
         this.setPlatform(in.readString());
         this.setHistory(in.readArray(Object.class.getClassLoader()));
     }
+
+    @BindingAdapter({"bind:imageUrl"})
+    public static void loadImage(ImageView view, String imageUrl) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            executor.submit(new DownloadImageTask(view, imageUrl)).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

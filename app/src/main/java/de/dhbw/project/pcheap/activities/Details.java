@@ -1,8 +1,5 @@
 package de.dhbw.project.pcheap.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -16,9 +13,13 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.databinding.DataBindingUtil;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -29,16 +30,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import de.dhbw.project.pcheap.R;
-import de.dhbw.project.pcheap.pojo.DownloadImageTask;
+import de.dhbw.project.pcheap.databinding.ActivityDetailsBinding;
 import de.dhbw.project.pcheap.pojo.Item;
 
 public class Details extends AppCompatActivity {
@@ -46,9 +44,11 @@ public class Details extends AppCompatActivity {
     SwipeListener swipeListener;
     ArrayList<Item> itemList;
     int position;
-    String url;
+    Item item;
     private Animator animator;
     private int animationDuration;
+    ImageView largeImageView;
+    ImageView smallImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,46 +57,32 @@ public class Details extends AppCompatActivity {
 
         itemList = getIntent().getParcelableArrayListExtra("itemList");
         position = getIntent().getIntExtra("position", 0);
-        Item i = itemList.get(position);
+        item = itemList.get(position);
         swipeListener = new SwipeListener(findViewById(R.id.DetailLayout));
 
-        TextView textView;
+        ActivityDetailsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_details);
+        binding.setItem(item);
 
-        textView = findViewById(R.id.name);
-        textView.setText(i.getName());
+        ((Button) findViewById(R.id.go_to_shop_btn)).setText(
+                String.format(
+                        getResources().getString(R.string.go_to_shop),
+                        item.getPrice()
+                )
+        );
 
-        textView = findViewById(R.id.go_to_shop_btn);
-        textView.setText(String.format(getResources().getString(R.string.go_to_shop), i.getPrice()));
+        setUpGraph(item);
 
-        textView = findViewById(R.id.description);
-        String description = i.getDescription();
-        if (description == null || description.length() == 0)
-            textView.setText(R.string.no_description);
-        else
-            textView.setText(description);
-
-        textView = findViewById(R.id.platform);
-        textView.setText(i.getPlatform());
-
-        url = i.getSiteUrl();
-
-        findViewById(R.id.go_to_shop_btn).setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(android.net.Uri.parse(url));
-            startActivity(intent);
-        });
-
-        ImageView smallImageView = findViewById(R.id.pic);
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(new DownloadImageTask(smallImageView, i.getImageUrl()));
-
-        findViewById(R.id.pic).setAlpha(0.4f);
-
-        findViewById(R.id.pic).setOnClickListener(v -> zoomImage(smallImageView, i.getImageUrl()));
         animationDuration = getResources().getInteger(
                 android.R.integer.config_shortAnimTime);
-        setUpGraph(i);
+
+        largeImageView = findViewById(R.id.expanded_image);
+        smallImageView = findViewById(R.id.pic);
+    }
+
+    public void onShopButtonClicked(View view) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(android.net.Uri.parse(item.getSiteUrl()));
+        startActivity(intent);
     }
 
     private void setUpGraph(Item i) {
@@ -144,7 +130,7 @@ public class Details extends AppCompatActivity {
 
         series.setOnDataPointTapListener(
                 (series1, dataPoint) -> Toast.makeText(getApplicationContext(),
-                dataPoint.getY() + "€", Toast.LENGTH_SHORT).show());
+                        dataPoint.getY() + "€", Toast.LENGTH_SHORT).show());
 
         if (accGrowth < 1)
             series.setColor(Color.GREEN);
@@ -243,26 +229,60 @@ public class Details extends AppCompatActivity {
         }
     }
 
-    private void zoomImage(ImageView smallImageView, String imageUrl){
+    public void onSmallImageClicked(View v) {
         // If there are any animations playing right now, cancel them to prevent weird interactions
-        if(animator != null) {
+        if (animator != null) {
             animator.cancel();
         }
 
-        //Load the Image into the expanded imageView and bring it to the front
+        //Make the small imageView invisible and expanded imageView visible
+        smallImageView.setVisibility(View.INVISIBLE);
+        largeImageView.setVisibility(View.VISIBLE);
+
+        AnimatorSet set = getImageAnimator(true);
+
+        set.start();
+        animator = set;
+    }
+
+    public void onLargeImageClicked(View v) {
+        closeLargeImage();
+    }
+
+    private void closeLargeImage() {
+        if (animator != null) {
+            animator.cancel();
+        }
+
+        ImageView smallImageView = findViewById(R.id.pic);
+
+        AnimatorSet set = getImageAnimator(false);
+
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                smallImageView.setVisibility(View.VISIBLE);
+                largeImageView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                smallImageView.setVisibility(View.VISIBLE);
+                largeImageView.setVisibility(View.GONE);
+            }
+        });
+        set.start();
+        animator = set;
+    }
+
+    private AnimatorSet getImageAnimator(boolean doOpen) {
         ImageView largeImageView = findViewById(R.id.expanded_image);
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(new DownloadImageTask(largeImageView, imageUrl));
-        largeImageView.bringToFront();
 
-        largeImageView.getBackground().setTint(getColor(R.color.tint));
-
-        // Set Bounds for start and end of Animation
         final Rect startBounds = new Rect();
         final Rect finalBounds = new Rect();
         final Point globalOffset = new Point();
 
-        smallImageView.getGlobalVisibleRect(startBounds);
+        findViewById(R.id.pic).getGlobalVisibleRect(startBounds);
         findViewById(R.id.DetailLayout).getGlobalVisibleRect(finalBounds, globalOffset);
 
         //Needed to counteract the offset otherwise the background wouldn't fill the entire screen
@@ -290,27 +310,28 @@ public class Details extends AppCompatActivity {
             startBounds.bottom += deltaHeight;
         }
 
-        //Make the small imageView invisible and expanded imageView visible
-        smallImageView.setAlpha(0f);
-        largeImageView.setVisibility(View.VISIBLE);
-
-        //Set the Pivot to the top-left corner otherwise the animation starts in the middle
-        largeImageView.setPivotX(0f);
-        largeImageView.setPivotY(0f);
-
-        //Start the Animation of moving/enlarging the Image from startBounds to endBounds
-        //and set parameters like duration and the interpolator (start quick and slow down for a
-        //more realistic feel)
         AnimatorSet set = new AnimatorSet();
-        set
-                .play(ObjectAnimator.ofFloat(largeImageView, View.X,
-                        startBounds.left, finalBounds.left))
-                .with(ObjectAnimator.ofFloat(largeImageView, View.Y,
-                        startBounds.top, finalBounds.top))
-                .with(ObjectAnimator.ofFloat(largeImageView, View.SCALE_X,
-                        startScale, 1f))
-                .with(ObjectAnimator.ofFloat(largeImageView,
-                        View.SCALE_Y, startScale, 1f));
+        if (doOpen)
+            set
+                    .play(ObjectAnimator.ofFloat(largeImageView, View.X,
+                            startBounds.left, finalBounds.left))
+                    .with(ObjectAnimator.ofFloat(largeImageView, View.Y,
+                            startBounds.top, finalBounds.top))
+                    .with(ObjectAnimator.ofFloat(largeImageView, View.SCALE_X,
+                            startScale, 1f))
+                    .with(ObjectAnimator.ofFloat(largeImageView,
+                            View.SCALE_Y, startScale, 1f));
+
+        else
+            set
+                    .play(ObjectAnimator.ofFloat(largeImageView,
+                            View.X, startBounds.left))
+                    .with(ObjectAnimator.ofFloat(largeImageView,
+                            View.Y, startBounds.top))
+                    .with(ObjectAnimator.ofFloat(largeImageView,
+                            View.SCALE_X, startScale))
+                    .with(ObjectAnimator.ofFloat(largeImageView,
+                            View.SCALE_Y, startScale));
         set.setDuration(animationDuration);
         set.setInterpolator(new DecelerateInterpolator());
         set.addListener(new AnimatorListenerAdapter() {
@@ -324,117 +345,17 @@ public class Details extends AppCompatActivity {
                 animator = null;
             }
         });
-        set.start();
-        animator = set;
 
-        // Do basically the same thing the other way around
-        final float startScaleFinal = startScale;
-        largeImageView.setOnClickListener(view -> {
-            if (animator != null) {
-                animator.cancel();
-            }
 
-            AnimatorSet set1 = new AnimatorSet();
-            set1.play(ObjectAnimator
-                    .ofFloat(largeImageView, View.X, startBounds.left))
-                    .with(ObjectAnimator
-                            .ofFloat(largeImageView,
-                                    View.Y,startBounds.top))
-                    .with(ObjectAnimator
-                            .ofFloat(largeImageView,
-                                    View.SCALE_X, startScaleFinal))
-                    .with(ObjectAnimator
-                            .ofFloat(largeImageView,
-                                    View.SCALE_Y, startScaleFinal));
-            set1.setDuration(animationDuration);
-            set1.setInterpolator(new DecelerateInterpolator());
-            set1.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    largeImageView.getBackground().setTint(getColor(R.color.white));
-                    smallImageView.setAlpha(0.4f);
-                    largeImageView.setVisibility(View.GONE);
-                    animator = null;
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                    largeImageView.getBackground().setTint(getColor(R.color.white));
-                    smallImageView.setAlpha(0.4f);
-                    largeImageView.setVisibility(View.GONE);
-                    animator = null;
-                }
-            });
-            set1.start();
-            animator = set1;
-        });
+        return set;
     }
 
     @Override
     public void onBackPressed() {
         // Zoom out if the enlarged image is visible and finish the Activity if it is not
-        if(findViewById(R.id.expanded_image).getVisibility() == View.VISIBLE){
-            final Rect startBounds = new Rect();
-            final Rect finalBounds = new Rect();
-
-            ImageView largeImageView = findViewById(R.id.expanded_image);
-            ImageView smallImageView = findViewById(R.id.pic);
-
-            smallImageView.getGlobalVisibleRect(startBounds);
-            findViewById(R.id.DetailLayout).getGlobalVisibleRect(finalBounds);
-
-            float startScale;
-            if ((float) finalBounds.width() / finalBounds.height()
-                    > (float) startBounds.width() / startBounds.height()) {
-
-                startScale = (float) startBounds.height() / finalBounds.height();
-                float startWidth = startScale * finalBounds.width();
-                float deltaWidth = (startWidth - startBounds.width()) / 2;
-                startBounds.left -= deltaWidth;
-                startBounds.right += deltaWidth;
-            } else {
-
-                startScale = (float) startBounds.width() / finalBounds.width();
-                float startHeight = startScale * finalBounds.height();
-                float deltaHeight = (startHeight - startBounds.height()) / 2;
-                startBounds.top -= deltaHeight;
-                startBounds.bottom += deltaHeight;
-            }
-
-            AnimatorSet set1 = new AnimatorSet();
-            set1.play(ObjectAnimator
-                    .ofFloat(largeImageView, View.X, startBounds.left))
-                    .with(ObjectAnimator
-                            .ofFloat(largeImageView,
-                                    View.Y,startBounds.top))
-                    .with(ObjectAnimator
-                            .ofFloat(largeImageView,
-                                    View.SCALE_X, startScale))
-                    .with(ObjectAnimator
-                            .ofFloat(largeImageView,
-                                    View.SCALE_Y, startScale));
-            set1.setDuration(animationDuration);
-            set1.setInterpolator(new DecelerateInterpolator());
-            set1.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    largeImageView.getBackground().setTint(getColor(R.color.white));
-                    smallImageView.setAlpha(0.4f);
-                    largeImageView.setVisibility(View.GONE);
-                    animator = null;
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                    largeImageView.getBackground().setTint(getColor(R.color.white));
-                    smallImageView.setAlpha(0.4f);
-                    largeImageView.setVisibility(View.GONE);
-                    animator = null;
-                }
-            });
-            set1.start();
-            animator = set1;
-        }else{
+        if (findViewById(R.id.expanded_image).getVisibility() == View.VISIBLE) {
+            closeLargeImage();
+        } else {
             this.finish();
         }
     }
