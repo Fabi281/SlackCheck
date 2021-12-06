@@ -3,6 +3,7 @@ package de.dhbw.project.pcheap.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
@@ -51,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ItemAdapter(filteredItems, this);
         RecyclerView rv = findViewById(R.id.rvHits);
         rv.setAdapter(adapter);
-        rv.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void loadData(String query){
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<List<Item>> call, @NonNull Throwable t) {
                 findViewById(R.id.rvHits).setVisibility(View.GONE);
                 findViewById(R.id.viewNoResults).setVisibility(View.VISIBLE);
-                Log.d(TAG, "onFailure: fail" + t.toString());
+                Log.d(TAG, "onFailure: fail" + t);
             }
         }, query);
 

@@ -37,7 +37,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_hit, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_item, parent, false);
         return new ItemViewHolder(v);
     }
 
@@ -54,7 +54,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             ActivityOptions options =
                     ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext(),
                             Pair.create(view.findViewById(R.id.ihPic), "imageTransition"),
-                            Pair.create(view.findViewById(R.id.ihName), "nameTransition"),
+                            Pair.create(view.findViewById(R.id.ihPic), "nameTransition"),
                             Pair.create(view.findViewById(R.id.ihPrice), "priceTransition"));
 
             view.getContext().startActivity(in, options.toBundle());
