@@ -6,7 +6,7 @@
     <string name="no_results_title">We did not find anything.</string>
     <string name="no_results_subtext">Check your internet connection or search for something else.</string>
     <string name="description_label">Description</string>
-    <string name="go_to_shop">Buy</string>
+    <string name="go_to_shop">Buy (%1$.2f €)</string>
     <string name="price_history">Price history</string>
     <string name="no_description">No description available</string>
     <string name="search">Search</string>
