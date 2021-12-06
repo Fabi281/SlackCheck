@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alphabet">Alphabet</string>
+    <string name="price">Preis</string>
+    <string name="search_to_start">Klicke auf die Lupe, um die besten Preise zu finden!</string>
+    <string name="no_results_title">Es wurden keine Ergebnisse gefunden.</string>
+    <string name="no_results_subtext">Überprüfe deine Internetverbindung.</string>
+    <string name="description_label">Beschreibung</string>
+    <string name="go_to_shop">Kaufen (%1$.2f €)</string>
+    <string name="price_history">Preisverlauf</string>
+    <string name="no_description">Keine Beschreibung verfügbar</string>
+    <string name="search">Suche</string>
+    <string name="product_image">Produktbild</string>
+    <string name="trendIndicator">Trend Indikator</string>
+    <string name="app_logo">App Logo</string>
+    <string name="formatted_price">%1$.2f €</string>
+    <string name="loading">Laden der Suchergebnisse…</string>
+    <string name="queryhint">Suche Produkte hier…</string>
+</resources>
