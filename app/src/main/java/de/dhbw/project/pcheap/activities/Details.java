@@ -13,7 +13,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -62,13 +61,6 @@ public class Details extends AppCompatActivity {
 
         ActivityDetailsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_details);
         binding.setItem(item);
-
-        ((Button) findViewById(R.id.go_to_shop_btn)).setText(
-                String.format(
-                        getResources().getString(R.string.go_to_shop),
-                        item.getPrice()
-                )
-        );
 
         setUpGraph(item);
 

@@ -70,8 +70,6 @@ public class Item implements Parcelable {
 
     public double getPrice() { return price; }
 
-    public String getFormattedPrice() { return String.format(Locale.getDefault(), "%.2f €", price); }
-
     public void setPrice(double price) { this.price = price; }
 
     @Override
@@ -111,6 +109,10 @@ public class Item implements Parcelable {
         this.setPlatform(in.readString());
         this.setHistory(in.readArray(Object.class.getClassLoader()));
     }
+
+    // Methods for data binding
+
+    public String getFormattedPrice() { return String.format(Locale.getDefault(), "%.2f €", price); }
 
     @BindingAdapter({"bind:imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
