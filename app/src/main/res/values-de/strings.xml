@@ -6,7 +6,7 @@
     <string name="no_results_title">Es wurden keine Ergebnisse gefunden.</string>
     <string name="no_results_subtext">Überprüfe deine Internetverbindung.</string>
     <string name="description_label">Beschreibung</string>
-    <string name="go_to_shop">Kaufen</string>
+    <string name="go_to_shop">Kaufen (%1$.2f €)</string>
     <string name="price_history">Preisverlauf</string>
     <string name="no_description">Keine Beschreibung verfügbar</string>
     <string name="search">Suche</string>
