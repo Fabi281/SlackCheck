@@ -9,6 +9,7 @@ import androidx.databinding.BindingAdapter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,6 +30,10 @@ public class Item implements Parcelable {
     @SerializedName("price")
     @Expose
     private double price;
+
+    @SerializedName("growth")
+    @Expose
+    private double growth;
 
     @SerializedName("description")
     @Expose
@@ -70,6 +75,10 @@ public class Item implements Parcelable {
     public double getPrice() { return price; }
 
     public void setPrice(double price) { this.price = price; }
+
+    public double getGrowth() { return growth; }
+
+    public void setGrowth(double growth) { this.growth = growth; }
 
     @Override
     public int describeContents() {
@@ -121,4 +130,14 @@ public class Item implements Parcelable {
         }
     }
 
+    public String getGrowthFormatted(){
+        double growthInPercent = (getGrowth()-1)*100;
+        String formatted = String.format(Locale.getDefault(), "%.2f", growthInPercent) + "%";
+        if (growthInPercent > 0.1) {
+            return "+" + formatted;
+        } else if (growthInPercent < -0.1){
+            return "-" + formatted;
+        } else
+            return "+0%";
+    }
 }

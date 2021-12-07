@@ -160,11 +160,11 @@ public class Details extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show());
 
         if (accGrowth < 0.99)
-            series.setColor(Color.GREEN);
+            series.setColor(getColor(R.color.trend_good));
         else if (accGrowth > 1.01)
-            series.setColor(Color.RED);
+            series.setColor(getColor(R.color.trend_bad));
         else
-            series.setColor(Color.YELLOW);
+            series.setColor(getColor(R.color.trend_neutral));
 
 
         graphView.addSeries(series);

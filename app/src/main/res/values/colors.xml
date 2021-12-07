@@ -15,4 +15,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="tint">#804C4C4C</color>
     <color name="gray">#DDD</color>
+
+    <!-- Trend Colors -->
+    <color name="trend_good">#00C853</color>
+    <color name="trend_neutral">#FFEB3B</color>
+    <color name="trend_bad">#FF5722</color>
 </resources>

@@ -26,13 +26,13 @@
                 android:id="@+id/ihPic"
                 android:layout_width="0dp"
                 android:layout_height="130dp"
-                android:scaleType="centerCrop"
                 android:contentDescription="@string/product_image"
-                bind:imageUrl="@{item.imageUrl}"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/ihName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                bind:imageUrl="@{item.imageUrl}" />
 
             <TextView
                 android:id="@+id/ihName"
@@ -59,6 +59,29 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ihName" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#000000"
+                android:backgroundTint="@{item.growth > 1.01 ? @color/trend_bad : ( 0.99 > item.growth ? @color/trend_good : @color/trend_neutral)}"
+                android:padding="4dp"
+                android:text="@{item.growthFormatted}"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/ihPic"
+                app:layout_constraintTop_toTopOf="@+id/ihPic" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:scaleType="fitStart"
+                android:src="@drawable/ic_triangle"
+                android:tint="@{item.growth > 1.01 ? @color/trend_bad : ( 0.99 > item.growth ? @color/trend_good : @color/trend_neutral)}"
+                app:layout_constraintBottom_toBottomOf="@+id/textView7"
+                app:layout_constraintStart_toEndOf="@+id/textView7"
+                app:layout_constraintTop_toTopOf="@+id/textView7" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
