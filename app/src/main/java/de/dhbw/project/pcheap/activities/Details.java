@@ -156,7 +156,8 @@ public class Details extends AppCompatActivity {
 
         series.setOnDataPointTapListener(
                 (series1, dataPoint) -> Toast.makeText(getApplicationContext(),
-                        dataPoint.getY() + "€", Toast.LENGTH_SHORT).show());
+                        String.format(Locale.getDefault(), getString(R.string.formatted_price), dataPoint.getY()),
+                        Toast.LENGTH_SHORT).show());
 
         if (accGrowth < 0.99)
             series.setColor(Color.GREEN);
