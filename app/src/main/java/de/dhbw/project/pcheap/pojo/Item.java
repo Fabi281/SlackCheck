@@ -94,6 +94,7 @@ public class Item implements Parcelable {
         parcel.writeString(getDescription());
         parcel.writeString(getPlatform());
         parcel.writeArray(getHistory());
+        parcel.writeDouble(getGrowth());
     }
 
     public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -116,6 +117,7 @@ public class Item implements Parcelable {
         this.setDescription(in.readString());
         this.setPlatform(in.readString());
         this.setHistory(in.readArray(Object.class.getClassLoader()));
+        this.setGrowth(in.readDouble());
     }
 
     // Methods for data binding

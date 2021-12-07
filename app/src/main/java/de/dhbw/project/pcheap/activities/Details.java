@@ -131,14 +131,12 @@ public class Details extends AppCompatActivity {
         long maxDate = 0;
         double minPrice = Double.MAX_VALUE;
         double maxPrice = 0;
-        double accGrowth = 1;
         for (int j = 0; j < jsonArray.length(); j++) {
             DataPoint dp = null;
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(j);
                 Date date = new Date(jsonObject.getLong("timestamp") * 1000L);
                 double price = jsonObject.getDouble("price");
-                accGrowth *= jsonObject.getDouble("growth");
                 minDate = Math.min(minDate, date.getTime());
                 maxDate = Math.max(maxDate, date.getTime());
                 minPrice = Math.min(minPrice, price);
@@ -159,13 +157,14 @@ public class Details extends AppCompatActivity {
                         String.format(Locale.getDefault(), getString(R.string.formatted_price), dataPoint.getY()),
                         Toast.LENGTH_SHORT).show());
 
-        if (accGrowth < 0.99)
+        if (i.getGrowth() < 0.99)
             series.setColor(getColor(R.color.trend_good));
-        else if (accGrowth > 1.01)
+        else if (i.getGrowth() > 1.01)
             series.setColor(getColor(R.color.trend_bad));
         else
             series.setColor(getColor(R.color.trend_neutral));
 
+        Toast.makeText(this, ""+i.getGrowth(), Toast.LENGTH_SHORT).show();
 
         graphView.addSeries(series);
 
@@ -185,9 +184,9 @@ public class Details extends AppCompatActivity {
         graphView.getGridLabelRenderer().setNumHorizontalLabels(3);
 
         ImageView trendIndicator = findViewById(R.id.graph_trend_img);
-        if (accGrowth < 0.99)
+        if (i.getGrowth() < 0.99)
             trendIndicator.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.arrow_down));
-        else if (accGrowth > 1.01)
+        else if (i.getGrowth() > 1.01)
             trendIndicator.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.arrow_up));
         else
             trendIndicator.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.arrow_flat));
