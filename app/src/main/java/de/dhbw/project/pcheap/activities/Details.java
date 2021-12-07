@@ -40,14 +40,14 @@ import de.dhbw.project.pcheap.pojo.Item;
 
 public class Details extends AppCompatActivity {
 
-    SwipeListener swipeListener;
     ArrayList<Item> itemList;
-    int position;
+    int currentPosition;
     Item item;
     private Animator animator;
     private int animationDuration;
     ImageView largeImageView;
     ImageView smallImageView;
+    GestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +55,8 @@ public class Details extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
         itemList = getIntent().getParcelableArrayListExtra("itemList");
-        position = getIntent().getIntExtra("position", 0);
-        item = itemList.get(position);
-        swipeListener = new SwipeListener(findViewById(R.id.DetailLayout));
+        currentPosition = getIntent().getIntExtra("position", 0);
+        item = itemList.get(currentPosition);
 
         ActivityDetailsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_details);
         binding.setItem(item);
@@ -69,6 +68,41 @@ public class Details extends AppCompatActivity {
 
         largeImageView = findViewById(R.id.expanded_image);
         smallImageView = findViewById(R.id.pic);
+
+        int threshold = 100;
+        int velocity_threshold = 100;
+
+        GestureDetector.SimpleOnGestureListener listener =
+                new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onDown(MotionEvent e) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                        float xDiff = e2.getX() - e1.getX();
+                        try {
+                            if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold) {
+                                if (xDiff > 0) {
+                                    if (currentPosition - 1 >= 0) {
+                                        swipeToOtherItem(-1);
+                                        return true;
+                                    }
+                                } else {
+                                    if (currentPosition + 1 < itemList.size()) {
+                                        swipeToOtherItem(1);
+                                        return true;
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    }
+                };
+        gestureDetector = new GestureDetector(this, listener);
     }
 
     public void onShopButtonClicked(View view) {
@@ -162,63 +196,16 @@ public class Details extends AppCompatActivity {
 
     }
 
-    private class SwipeListener implements View.OnTouchListener {
-
-        GestureDetector gestureDetector;
-
-        SwipeListener(View v) {
-            int threshold = 100;
-            int velocity_threshold = 100;
-
-            GestureDetector.SimpleOnGestureListener listener =
-                    new GestureDetector.SimpleOnGestureListener() {
-                        @Override
-                        public boolean onDown(MotionEvent e) {
-                            return true;
-                        }
-
-                        @Override
-                        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                            float xDiff = e2.getX() - e1.getX();
-                            try {
-                                if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold) {
-                                    if (xDiff > 0) {
-                                        if (position - 1 >= 0) {
-                                            Intent in = new Intent(v.getContext(), Details.class);
-                                            in.putParcelableArrayListExtra("itemList", itemList);
-                                            in.putExtra("position", position - 1);
-                                            in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                            v.getContext().startActivity(in);
-                                            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_left);
-                                            return true;
-                                        }
-                                    } else {
-                                        if (position + 1 < itemList.size()) {
-                                            Intent in = new Intent(v.getContext(), Details.class);
-                                            in.putParcelableArrayListExtra("itemList", itemList);
-                                            in.putExtra("position", position + 1);
-                                            in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                            v.getContext().startActivity(in);
-                                            overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_right);
-                                            return true;
-                                        }
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            return false;
-                        }
-                    };
-            gestureDetector = new GestureDetector(v.getContext(), listener);
-            v.setOnTouchListener(this);
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            v.performClick();
-            return gestureDetector.onTouchEvent(event);
-        }
+    private void swipeToOtherItem(int direction) {
+        Intent in = new Intent(this, Details.class);
+        in.putParcelableArrayListExtra("itemList", itemList);
+        in.putExtra("position", currentPosition+direction);
+        in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(in);
+        if(direction < 0)
+            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_left);
+        else
+            overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_right);
     }
 
     public void onSmallImageClicked(View v) {
@@ -267,6 +254,7 @@ public class Details extends AppCompatActivity {
         animator = set;
     }
 
+    // set up the animator for the image
     private AnimatorSet getImageAnimator(boolean doOpen) {
         ImageView largeImageView = findViewById(R.id.expanded_image);
 
@@ -351,4 +339,12 @@ public class Details extends AppCompatActivity {
             this.finish();
         }
     }
+
+    // used for swiping between items
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
 }

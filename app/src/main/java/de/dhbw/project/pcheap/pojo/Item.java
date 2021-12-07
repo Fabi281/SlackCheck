@@ -9,7 +9,6 @@ import androidx.databinding.BindingAdapter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -112,9 +111,7 @@ public class Item implements Parcelable {
 
     // Methods for data binding
 
-    public String getFormattedPrice() { return String.format(Locale.getDefault(), "%.2f €", price); }
-
-    @BindingAdapter({"bind:imageUrl"})
+    @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         try {
