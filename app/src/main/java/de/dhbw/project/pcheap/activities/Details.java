@@ -124,6 +124,13 @@ public class Details extends AppCompatActivity {
             return;
         }
 
+        if (jsonArray.length() < 2){
+            findViewById(R.id.graph).setVisibility(View.GONE);
+            findViewById(R.id.graph_trend_img).setVisibility(View.GONE);
+            findViewById(R.id.txt_no_history).setVisibility(View.VISIBLE);
+            return;
+        }
+
         GraphView graphView = findViewById(R.id.graph);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
 

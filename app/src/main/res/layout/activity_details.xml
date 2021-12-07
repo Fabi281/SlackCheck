@@ -216,18 +216,33 @@
                 android:layout_height="200dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/graph_label" />
+                app:layout_constraintTop_toBottomOf="@+id/graph_label"
+                bind:visibility="gone" />
 
             <ImageView
                 android:id="@+id/graph_trend_img"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:contentDescription="@string/trendIndicator"
                 app:layout_constraintBottom_toBottomOf="@+id/graph"
                 app:layout_constraintEnd_toEndOf="@+id/graph"
                 app:layout_constraintStart_toStartOf="@+id/graph"
                 app:layout_constraintTop_toTopOf="@+id/graph"
                 app:srcCompat="@drawable/arrow_flat"
-                android:contentDescription="@string/trendIndicator"/>
+                bind:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txt_no_history"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/no_history"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/graph"
+                bind:visibility="visible" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
