@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ItemAdapter(filteredItems);
         RecyclerView rv = findViewById(R.id.rvHits);
         rv.setAdapter(adapter);
+        rv.setItemViewCacheSize(4);
+        rv.setHasFixedSize(true);
     }
 
     private void loadData(String query){
