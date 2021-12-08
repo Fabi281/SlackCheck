@@ -136,7 +136,7 @@ public class Details extends AppCompatActivity {
         double minPrice = Double.MAX_VALUE;
         double maxPrice = 0;
         for (int j = 0; j < jsonArray.length(); j++) {
-            DataPoint dp = null;
+            DataPoint dp;
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(j);
                 Date date = new Date(jsonObject.getLong("timestamp") * 1000L);
