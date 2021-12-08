@@ -119,7 +119,6 @@ public class Details extends AppCompatActivity {
         }
 
         if (jsonArray == null) {
-            Toast.makeText(this, "No history available", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -169,8 +168,6 @@ public class Details extends AppCompatActivity {
             series.setColor(getColor(R.color.trend_bad));
         else
             series.setColor(getColor(R.color.trend_neutral));
-
-        Toast.makeText(this, ""+i.getGrowth(), Toast.LENGTH_SHORT).show();
 
         graphView.addSeries(series);
 

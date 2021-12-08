@@ -138,7 +138,7 @@ public class Item implements Parcelable {
         if (growthInPercent > 0.1) {
             return "+" + formatted;
         } else if (growthInPercent < -0.1){
-            return "-" + formatted;
+            return formatted;
         } else
             return "+0%";
     }
