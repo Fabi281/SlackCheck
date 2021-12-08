@@ -108,7 +108,6 @@
                 bind:text="Platform" />
 
             <Button
-                style="@style/buyBtn"
                 android:id="@+id/go_to_shop_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"

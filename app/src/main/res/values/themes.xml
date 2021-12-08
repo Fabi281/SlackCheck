@@ -1,9 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.PCheap" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.PCheap" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorPrimary">@color/primary_dark</item>
+        <item name="colorPrimaryVariant">@color/primary</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondary</item>
@@ -15,11 +15,4 @@
         <item name="android:windowActivityTransitions">true</item>
     </style>
 
-    <style name="toolbarStyle">
-        <item name="android:background">@color/primary</item>
-    </style>
-
-    <style name="buyBtn">
-        <item name="android:background">@color/secondary</item>
-    </style>
 </resources>
