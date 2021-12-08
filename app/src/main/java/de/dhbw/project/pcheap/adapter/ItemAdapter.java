@@ -23,7 +23,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     ArrayList<Item> ItemList;
 
-    public ItemAdapter(ArrayList<Item> itemList, Context context){
+    public ItemAdapter(ArrayList<Item> itemList){
         this.ItemList = itemList;
     }
 
