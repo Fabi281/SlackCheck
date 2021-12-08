@@ -2,15 +2,24 @@
     <!-- Base application theme. -->
     <style name="Theme.PCheap" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/oxford_blue</item>
-        <item name="colorPrimaryVariant">@color/oxford_blue</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/orange_web</item>
-        <item name="colorSecondaryVariant">@color/orange_web</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+    </style>
+
+    <style name="toolbarStyle">
+        <item name="android:background">@color/primary</item>
+    </style>
+
+    <style name="buyBtn">
+        <item name="android:background">@color/secondary</item>
     </style>
 </resources>
