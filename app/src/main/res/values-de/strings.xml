@@ -2,7 +2,6 @@
 <resources>
     <string name="alphabet">Alphabet</string>
     <string name="price">Preis</string>
-    <string name="search_to_start">Klicke auf die Lupe, um die besten Preise zu finden!</string>
     <string name="no_results_title">Es wurden keine Ergebnisse gefunden.</string>
     <string name="no_results_subtext">Überprüfe deine Internetverbindung.</string>
     <string name="description_label">Beschreibung</string>
@@ -18,4 +17,5 @@
     <string name="queryhint">Suche Produkte hier…</string>
     <string name="no_history">Kein Verlauf verfügbar. Entweder ist das Produkt neu, oder die Platform verbietet das Speichern.</string>
     <string name="ImageError">Bild konnte nicht geladen werden</string>
+    <string name="search_to_start">Um die besten Preise zu finden, klicke auf die Lupe!</string>
 </resources>
