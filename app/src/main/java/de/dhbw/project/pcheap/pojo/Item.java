@@ -1,19 +1,23 @@
 package de.dhbw.project.pcheap.pojo;
 
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.BindingAdapter;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import de.dhbw.project.pcheap.R;
 
@@ -127,13 +131,18 @@ public class Item implements Parcelable {
 
     @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        try {
-            executor.submit(new DownloadImageTask(view, imageUrl)).get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            Toast.makeText(view.getContext(), R.string.ImageError, Toast.LENGTH_SHORT).show();
-        }
+        Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.ic_launcher_foreground).addListener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                Toast.makeText(view.getContext(), R.string.ImageError, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                return false;
+            }
+        }).into(view);
     }
 
     public String getGrowthFormatted(){
