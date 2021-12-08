@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,22 +82,18 @@ public class Details extends AppCompatActivity {
                     @Override
                     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                         float xDiff = e2.getX() - e1.getX();
-                        try {
-                            if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold) {
-                                if (xDiff > 0) {
-                                    if (currentPosition - 1 >= 0) {
-                                        swipeToOtherItem(-1);
-                                        return true;
-                                    }
-                                } else {
-                                    if (currentPosition + 1 < itemList.size()) {
-                                        swipeToOtherItem(1);
-                                        return true;
-                                    }
+                        if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold) {
+                            if (xDiff > 0) {
+                                if (currentPosition - 1 >= 0) {
+                                    swipeToOtherItem(-1);
+                                    return true;
+                                }
+                            } else {
+                                if (currentPosition + 1 < itemList.size()) {
+                                    swipeToOtherItem(1);
+                                    return true;
                                 }
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
                         return false;
                     }
@@ -110,22 +107,24 @@ public class Details extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void showMessageNoGraph() {
+        findViewById(R.id.graph).setVisibility(View.GONE);
+        findViewById(R.id.graph_trend_img).setVisibility(View.GONE);
+        findViewById(R.id.txt_no_history).setVisibility(View.VISIBLE);
+    }
+
     private void setUpGraph(Item i) {
+
         JSONArray jsonArray = null;
         try {
             jsonArray = new JSONArray(i.getHistory());
         } catch (JSONException e) {
             e.printStackTrace();
+            // No error for the user here, as they will see a message instead of the graph anyway.
         }
 
-        if (jsonArray == null) {
-            return;
-        }
-
-        if (jsonArray.length() < 2){
-            findViewById(R.id.graph).setVisibility(View.GONE);
-            findViewById(R.id.graph_trend_img).setVisibility(View.GONE);
-            findViewById(R.id.txt_no_history).setVisibility(View.VISIBLE);
+        if (jsonArray == null || jsonArray.length() < 2) {
+            showMessageNoGraph();
             return;
         }
 
@@ -149,6 +148,8 @@ public class Details extends AppCompatActivity {
                 dp = new DataPoint(date, price);
             } catch (JSONException e) {
                 e.printStackTrace();
+                showMessageNoGraph();
+                return;
             }
             series.appendData(dp, true, jsonArray.length() + 1);
         }
@@ -199,10 +200,10 @@ public class Details extends AppCompatActivity {
     private void swipeToOtherItem(int direction) {
         Intent in = new Intent(this, Details.class);
         in.putParcelableArrayListExtra("itemList", itemList);
-        in.putExtra("position", currentPosition+direction);
+        in.putExtra("position", currentPosition + direction);
         in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(in);
-        if(direction < 0)
+        if (direction < 0)
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_left);
         else
             overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_from_right);
