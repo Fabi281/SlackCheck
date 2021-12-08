@@ -3,6 +3,7 @@ package de.dhbw.project.pcheap.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.databinding.BindingAdapter;
 
@@ -13,6 +14,8 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import de.dhbw.project.pcheap.R;
 
 public class Item implements Parcelable {
     @SerializedName("image")
@@ -129,6 +132,7 @@ public class Item implements Parcelable {
             executor.submit(new DownloadImageTask(view, imageUrl)).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
+            Toast.makeText(view.getContext(), R.string.ImageError, Toast.LENGTH_SHORT).show();
         }
     }
 

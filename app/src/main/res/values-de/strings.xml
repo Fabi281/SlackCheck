@@ -17,4 +17,5 @@
     <string name="loading">Laden der Suchergebnisse…</string>
     <string name="queryhint">Suche Produkte hier…</string>
     <string name="no_history">Kein Verlauf verfügbar. Entweder ist das Produkt neu, oder die Platform verbietet das Speichern.</string>
+    <string name="ImageError">Bild konnte nicht geladen werden</string>
 </resources>

@@ -37,7 +37,7 @@
                 android:contentDescription="@string/product_image"
                 android:focusable="true"
                 android:foreground="@drawable/ic_baseline_search_24"
-                android:foregroundTint="#000000"
+                android:foregroundTint="@color/zoom_icon"
                 android:onClick="onSmallImageClicked"
                 android:transitionName="imageTransition"
                 app:layout_constraintBottom_toBottomOf="parent"
