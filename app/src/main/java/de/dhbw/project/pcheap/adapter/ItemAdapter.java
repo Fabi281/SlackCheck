@@ -2,7 +2,6 @@ package de.dhbw.project.pcheap.adapter;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Pair;
 import android.view.LayoutInflater;

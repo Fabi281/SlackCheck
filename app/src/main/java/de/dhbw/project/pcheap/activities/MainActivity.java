@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null){
                     filteredItems.clear();
                     filteredItems.addAll(response.body());
-                    sortByPrice();
+                    sortByPrice(true);
                     findViewById(R.id.loading_layout).setVisibility(View.GONE);
                     findViewById(R.id.rvHits).setVisibility(View.VISIBLE);
                 }else{
@@ -107,8 +107,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.SortAlpha)
             sortByName();
-        if(item.getItemId() == R.id.SortPrice)
-            sortByPrice();
+        if(item.getItemId() == R.id.SortPriceInc)
+            sortByPrice(true);
+        if(item.getItemId() == R.id.SortPriceDec)
+            sortByPrice(false);
+        if(item.getItemId() == R.id.SortGrowthInc)
+            sortByGrowth(true);
+        if(item.getItemId() == R.id.SortGrowthDec)
+            sortByGrowth(false);
         return true;
     }
 
@@ -121,10 +127,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void sortByPrice()
+    private void sortByPrice(boolean increasing)
     {
-        Comparator<Item> itemComparatorByPrice = Comparator.comparingDouble(Item::getPrice);
+        Comparator<Item> itemComparatorByPrice;
+        if(increasing){
+            itemComparatorByPrice = Comparator.comparingDouble(Item::getPrice);
+        }else{
+            itemComparatorByPrice = Comparator.comparingDouble(Item::getPrice).reversed();
+        }
         filteredItems.sort(itemComparatorByPrice);
+        adapter.notifyDataSetChanged();
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    private void sortByGrowth(boolean increasing)
+    {
+        Comparator<Item> itemComparatorByGrowth;
+        if(increasing){
+            itemComparatorByGrowth = Comparator.comparingDouble(Item::getGrowth);
+        }else{
+            itemComparatorByGrowth = Comparator.comparingDouble(Item::getGrowth).reversed();
+        }
+        filteredItems.sort(itemComparatorByGrowth);
         adapter.notifyDataSetChanged();
     }
 }

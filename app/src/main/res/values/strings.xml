@@ -18,4 +18,7 @@
     <string name="queryhint">Search Items here…</string>
     <string name="no_history">No histroy available. Either this item is new or the platform doesn\'t permit storing data.</string>
     <string name="ImageError">Image could not load</string>
+    <string name="increasing">Low to High</string>
+    <string name="decreasing">High to Low</string>
+    <string name="growth">Growth</string>
 </resources>

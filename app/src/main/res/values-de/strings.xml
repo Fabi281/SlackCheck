@@ -18,4 +18,7 @@
     <string name="no_history">Kein Verlauf verfügbar. Entweder ist das Produkt neu, oder die Platform verbietet das Speichern.</string>
     <string name="ImageError">Bild konnte nicht geladen werden</string>
     <string name="search_to_start">Um die besten Preise zu finden, klicke auf die Lupe!</string>
+    <string name="increasing">Aufsteigend</string>
+    <string name="decreasing">Absteigend</string>
+    <string name="growth">Preisentwicklung</string>
 </resources>

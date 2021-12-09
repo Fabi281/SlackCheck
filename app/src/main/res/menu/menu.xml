@@ -16,9 +16,35 @@
         android:id="@+id/SortAlpha"
         android:title="@string/alphabet"
         app:showAsAction="never"/>
+
     <item
-        android:id="@+id/SortPrice"
-        android:title="@string/price"
-        app:showAsAction="never"/>
+        android:id="@+id/PriceSubMenu"
+        android:title="@string/price">
+        <menu>
+            <item
+                android:id="@+id/SortPriceInc"
+                android:title="@string/increasing"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/SortPriceDec"
+                android:title="@string/decreasing"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/GrowthSubMenu"
+        android:title="@string/growth">
+        <menu>
+            <item
+                android:id="@+id/SortGrowthInc"
+                android:title="@string/increasing"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/SortGrowthDec"
+                android:title="@string/decreasing"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
 
 </menu>
