@@ -36,7 +36,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
 
-        // Give each item in the RecyclerView an onClickListener to change to its corresponding
+        // Give each item in the RecyclerView an onClickListener to be able to start their
+        // corresponding Detail-Activity
         holder.itemView.setOnClickListener(view -> {
             Intent in = new Intent(view.getContext(), Details.class);
 
