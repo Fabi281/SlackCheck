@@ -46,30 +46,41 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ItemAdapter(filteredItems);
         RecyclerView rv = findViewById(R.id.rvHits);
         rv.setAdapter(adapter);
+        // Set to improve performance
         rv.setItemViewCacheSize(4);
         rv.setHasFixedSize(true);
     }
 
     private void loadData(String query){
+        // Call API with Query from SearchView
         ir.getItems(new Callback<List<Item>>(){
             @Override
             public void onResponse(@NonNull Call<List<Item>> call, @NonNull Response<List<Item>> response) {
                 if (response.isSuccessful() && response.body() != null){
+                    // On successful response clear all items and fill it with the new items
                     filteredItems.clear();
                     filteredItems.addAll(response.body());
                     sortByPrice(true);
+                    // The API call is now finished thus the Loading-Icon can be removed and
+                    // the RecyclerView can be set visible
                     findViewById(R.id.loading_layout).setVisibility(View.GONE);
                     findViewById(R.id.rvHits).setVisibility(View.VISIBLE);
                 }else{
+                    // On failure we set the RecyclerView and Loading-Icon invisible if they
+                    // aren't already and present the User with an ErrorScreen
                     Log.d(TAG, "onResponse: fail");
                     findViewById(R.id.rvHits).setVisibility(View.GONE);
+                    findViewById(R.id.loading_layout).setVisibility(View.GONE);
                     findViewById(R.id.viewNoResults).setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Item>> call, @NonNull Throwable t) {
+                // On failure we set the RecyclerView and Loading-Icon invisible if they
+                // aren't already and present the User with an ErrorScreen
                 findViewById(R.id.rvHits).setVisibility(View.GONE);
+                findViewById(R.id.loading_layout).setVisibility(View.GONE);
                 findViewById(R.id.viewNoResults).setVisibility(View.VISIBLE);
                 Log.d(TAG, "onFailure: fail" + t);
             }
@@ -79,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate Menu and set Query Listener for searchView
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
@@ -87,9 +99,11 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                // Set Loading-Icon visible, everything else invisible
                 findViewById(R.id.rvHits).setVisibility(View.GONE);
                 findViewById(R.id.viewNoSearch).setVisibility(View.GONE);
                 findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
+                // Start Loading the data from Backend-API and close the SearchView (UX)
                 loadData(query);
                 searchView.clearFocus();
                 return true;

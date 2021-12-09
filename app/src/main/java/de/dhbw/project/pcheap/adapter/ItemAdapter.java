@@ -36,12 +36,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
 
+        // Give each item in the RecyclerView an onClickListener to change to its corresponding
         holder.itemView.setOnClickListener(view -> {
             Intent in = new Intent(view.getContext(), Details.class);
+
+            // List and Position to be able to Swipe to previous/next result in Details
             in.putParcelableArrayListExtra("itemList", ItemList);
             in.putExtra("position", position);
+
+            // Set this flag so swiping does not interact with the Back-Button
             in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
 
+            // Set shared elements which will get animated (move to their position) in the
+            // MainActivity -> Detail-Activity transition
             ActivityOptions options =
                     ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext(),
                             Pair.create(view.findViewById(R.id.ihPic), "imageTransition"),

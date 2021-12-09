@@ -21,6 +21,8 @@
         tools:listitem="@layout/card_item"
         tools:visibility="visible" />
 
+    <!-- Initial Layout, if nothing has been searched yet -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewNoSearch"
         android:layout_width="match_parent"
@@ -72,6 +74,8 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Layout, if nothing has been found (also Error-Layout) -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewNoResults"
         android:layout_width="match_parent"
@@ -113,6 +117,8 @@
             app:layout_constraintTop_toBottomOf="@+id/txtNoResults" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Layout, if the API-Call is in Progress but not yet finished -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/loading_layout"
