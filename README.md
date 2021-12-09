@@ -1,2 +1,2 @@
-# PCheap
+# SlackCheck
 Highschool Project

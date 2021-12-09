@@ -1,8 +1,8 @@
-package de.dhbw.project.pcheap.api;
+package de.dhbw.project.slackcheck.api;
 
 import java.util.List;
 
-import de.dhbw.project.pcheap.pojo.Item;
+import de.dhbw.project.slackcheck.pojo.Item;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

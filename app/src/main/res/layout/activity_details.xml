@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="de.dhbw.project.pcheap.pojo.Item" />
+            type="de.dhbw.project.slackcheck.pojo.Item" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/DetailLayout"

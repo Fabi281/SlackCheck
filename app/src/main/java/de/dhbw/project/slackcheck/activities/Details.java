@@ -1,4 +1,4 @@
-package de.dhbw.project.pcheap.activities;
+package de.dhbw.project.slackcheck.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -33,9 +33,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import de.dhbw.project.pcheap.R;
-import de.dhbw.project.pcheap.databinding.ActivityDetailsBinding;
-import de.dhbw.project.pcheap.pojo.Item;
+import de.dhbw.project.slackcheck.R;
+import de.dhbw.project.slackcheck.databinding.ActivityDetailsBinding;
+import de.dhbw.project.slackcheck.pojo.Item;
 
 public class Details extends AppCompatActivity {
 

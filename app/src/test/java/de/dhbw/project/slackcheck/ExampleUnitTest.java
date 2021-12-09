@@ -1,4 +1,4 @@
-package de.dhbw.project.pcheap;
+package de.dhbw.project.slackcheck;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package de.dhbw.project.pcheap.adapter;
+package de.dhbw.project.slackcheck.adapter;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import de.dhbw.project.pcheap.R;
-import de.dhbw.project.pcheap.activities.Details;
-import de.dhbw.project.pcheap.databinding.CardItemBinding;
-import de.dhbw.project.pcheap.pojo.Item;
+import de.dhbw.project.slackcheck.R;
+import de.dhbw.project.slackcheck.activities.Details;
+import de.dhbw.project.slackcheck.databinding.CardItemBinding;
+import de.dhbw.project.slackcheck.pojo.Item;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder>{
 

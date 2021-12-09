@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">PCheap</string>
+    <string name="app_name" translatable="false">SlackCheck</string>
     <string name="alphabet">Alphabet</string>
     <string name="price">Price</string>
     <string name="search_to_start">To find the best prices, click on the search icon above!</string>

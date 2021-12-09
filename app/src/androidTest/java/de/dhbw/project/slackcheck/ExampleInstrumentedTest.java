@@ -1,4 +1,4 @@
-package de.dhbw.project.pcheap;
+package de.dhbw.project.slackcheck;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("de.dhbw.project.pcheap", appContext.getPackageName());
+        assertEquals("de.dhbw.project.slackcheck", appContext.getPackageName());
     }
 }

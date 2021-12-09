@@ -1,4 +1,4 @@
-package de.dhbw.project.pcheap.pojo;
+package de.dhbw.project.slackcheck.pojo;
 
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
@@ -19,7 +19,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Locale;
 
-import de.dhbw.project.pcheap.R;
+import de.dhbw.project.slackcheck.R;
 
 public class Item implements Parcelable {
     @SerializedName("image")

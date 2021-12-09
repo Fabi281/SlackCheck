@@ -1,4 +1,4 @@
-package de.dhbw.project.pcheap.activities;
+package de.dhbw.project.slackcheck.activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import de.dhbw.project.pcheap.R;
-import de.dhbw.project.pcheap.adapter.ItemAdapter;
-import de.dhbw.project.pcheap.api.ItemRepo;
-import de.dhbw.project.pcheap.pojo.Item;
+import de.dhbw.project.slackcheck.R;
+import de.dhbw.project.slackcheck.adapter.ItemAdapter;
+import de.dhbw.project.slackcheck.api.ItemRepo;
+import de.dhbw.project.slackcheck.pojo.Item;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
