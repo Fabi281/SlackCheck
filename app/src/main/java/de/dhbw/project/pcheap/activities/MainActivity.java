@@ -105,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Sort the Recyclerview based on the filter the user selected
+        // No Switch-Statement is used due to ids not being final and Android Studio itself
+        // suggesting not to use Switch + ids
         if(item.getItemId() == R.id.SortAlpha)
             sortByName();
         if(item.getItemId() == R.id.SortPriceInc)

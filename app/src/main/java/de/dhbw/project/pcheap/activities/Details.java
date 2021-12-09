@@ -233,8 +233,6 @@ public class Details extends AppCompatActivity {
             animator.cancel();
         }
 
-        ImageView smallImageView = findViewById(R.id.pic);
-
         AnimatorSet set = getImageAnimator(false);
 
         set.addListener(new AnimatorListenerAdapter() {
@@ -256,13 +254,12 @@ public class Details extends AppCompatActivity {
 
     // set up the animator for the image
     private AnimatorSet getImageAnimator(boolean doOpen) {
-        ImageView largeImageView = findViewById(R.id.expanded_image);
 
         final Rect startBounds = new Rect();
         final Rect finalBounds = new Rect();
         final Point globalOffset = new Point();
 
-        findViewById(R.id.pic).getGlobalVisibleRect(startBounds);
+        smallImageView.getGlobalVisibleRect(startBounds);
         findViewById(R.id.DetailLayout).getGlobalVisibleRect(finalBounds, globalOffset);
 
         //Needed to counteract the offset otherwise the background wouldn't fill the entire screen
