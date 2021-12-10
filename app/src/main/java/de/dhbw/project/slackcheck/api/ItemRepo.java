@@ -14,7 +14,7 @@ public class ItemRepo {
 
     public ItemRepo(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://pcheap.gitdeploy.xyz")
+                .baseUrl("https://slackcheck.gitdeploy.xyz")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         itemApi = retrofit.create(ItemApi.class);
