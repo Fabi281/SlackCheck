@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import de.dhbw.project.pcheap.R;
+import de.dhbw.project.slackcheck.R;
 import de.dhbw.project.slackcheck.adapter.ItemAdapter;
 import de.dhbw.project.slackcheck.api.ItemRepo;
 import de.dhbw.project.slackcheck.pojo.Item;
