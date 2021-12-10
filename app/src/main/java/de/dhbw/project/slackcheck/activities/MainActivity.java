@@ -66,22 +66,14 @@ public class MainActivity extends AppCompatActivity {
                     findViewById(R.id.loading_layout).setVisibility(View.GONE);
                     findViewById(R.id.rvHits).setVisibility(View.VISIBLE);
                 }else{
-                    // On failure we set the RecyclerView and Loading-Icon invisible if they
-                    // aren't already and present the User with an ErrorScreen
+                    showNoResultMessage();
                     Log.d(TAG, "onResponse: fail");
-                    findViewById(R.id.rvHits).setVisibility(View.GONE);
-                    findViewById(R.id.loading_layout).setVisibility(View.GONE);
-                    findViewById(R.id.viewNoResults).setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Item>> call, @NonNull Throwable t) {
-                // On failure we set the RecyclerView and Loading-Icon invisible if they
-                // aren't already and present the User with an ErrorScreen
-                findViewById(R.id.rvHits).setVisibility(View.GONE);
-                findViewById(R.id.loading_layout).setVisibility(View.GONE);
-                findViewById(R.id.viewNoResults).setVisibility(View.VISIBLE);
+                showNoResultMessage();
                 Log.d(TAG, "onFailure: fail" + t);
             }
         }, query);
@@ -166,5 +158,13 @@ public class MainActivity extends AppCompatActivity {
         }
         filteredItems.sort(itemComparatorByGrowth);
         adapter.notifyDataSetChanged();
+    }
+
+    private void showNoResultMessage(){
+        // On failure we set the RecyclerView and Loading-Icon invisible if they
+        // aren't already and present the User with an ErrorScreen
+        findViewById(R.id.rvHits).setVisibility(View.GONE);
+        findViewById(R.id.loading_layout).setVisibility(View.GONE);
+        findViewById(R.id.viewNoResults).setVisibility(View.VISIBLE);
     }
 }
