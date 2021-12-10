@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import de.dhbw.project.slackcheck.R;
+import de.dhbw.project.pcheap.R;
 import de.dhbw.project.slackcheck.adapter.ItemAdapter;
 import de.dhbw.project.slackcheck.api.ItemRepo;
 import de.dhbw.project.slackcheck.pojo.Item;
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 // Set Loading-Icon visible, everything else invisible
                 findViewById(R.id.rvHits).setVisibility(View.GONE);
                 findViewById(R.id.viewNoSearch).setVisibility(View.GONE);
+                findViewById(R.id.viewNoResults).setVisibility(View.GONE);
                 findViewById(R.id.loading_layout).setVisibility(View.VISIBLE);
                 // Start Loading the data from Backend-API and close the SearchView (UX)
                 loadData(query);
