@@ -287,6 +287,8 @@ public class Details extends AppCompatActivity {
             startBounds.bottom += deltaHeight;
         }
 
+        // Construct and run the parallel animation of the four translation and
+        // scale properties (X, Y, SCALE_X, and SCALE_Y)
         AnimatorSet set = new AnimatorSet();
         if (doOpen)
             set
@@ -310,6 +312,7 @@ public class Details extends AppCompatActivity {
                     .with(ObjectAnimator.ofFloat(largeImageView,
                             View.SCALE_Y, startScale));
         set.setDuration(animationDuration);
+        // Start the animation faster and end slower
         set.setInterpolator(new DecelerateInterpolator());
         set.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -322,7 +325,6 @@ public class Details extends AppCompatActivity {
                 animator = null;
             }
         });
-
 
         return set;
     }

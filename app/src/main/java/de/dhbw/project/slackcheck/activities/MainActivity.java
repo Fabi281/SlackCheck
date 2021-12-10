@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "Main";
     private final ArrayList<Item> filteredItems = new ArrayList<>();
     private ItemAdapter adapter;
-    private final ItemRepo ir = new ItemRepo();
+    private final ItemRepo itemRepo = new ItemRepo();
 
 
     @Override
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadData(String query){
         // Call API with Query from SearchView
-        ir.getItems(new Callback<List<Item>>(){
+        itemRepo.getItems(new Callback<List<Item>>(){
             @Override
             public void onResponse(@NonNull Call<List<Item>> call, @NonNull Response<List<Item>> response) {
                 if (response.isSuccessful() && response.body() != null){
