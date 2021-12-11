@@ -80,7 +80,13 @@ public class Details extends AppCompatActivity {
 
                     @Override
                     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                        // Get the difference between the start of the fling/swipe and end to get
+                        // the distance and direction
                         float xDiff = e2.getX() - e1.getX();
+
+                        // Swipe to the next/previous Item in the list based on swipe-direction.
+                        // Check if a certain distance and velocity threshold has been met to
+                        // prevent that some taps are accidentally counted as swipes
                         if (Math.abs(xDiff) > threshold && Math.abs(velocityX) > velocity_threshold) {
                             if (xDiff > 0) {
                                 if (currentPosition - 1 >= 0) {
@@ -101,12 +107,15 @@ public class Details extends AppCompatActivity {
     }
 
     public void onShopButtonClicked(View view) {
+        // Go to the Online-Shop where the Item is sold
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(android.net.Uri.parse(item.getSiteUrl()));
         startActivity(intent);
     }
 
     private void showMessageNoGraph() {
+        // Show a message that we have not enough data to set up a graph
+        // (or are not allowed to store data)
         findViewById(R.id.graph).setVisibility(View.GONE);
         findViewById(R.id.graph_trend_img).setVisibility(View.GONE);
         findViewById(R.id.txt_no_history).setVisibility(View.VISIBLE);
@@ -198,10 +207,16 @@ public class Details extends AppCompatActivity {
 
     private void swipeToOtherItem(int direction) {
         Intent in = new Intent(this, Details.class);
+
+        // List and Position to be able to Swipe to previous/next result in the next Activity as well
         in.putParcelableArrayListExtra("itemList", itemList);
         in.putExtra("position", currentPosition + direction);
+
+        // Set this flag so swiping does not interact with the Back-Button
         in.setFlags(in.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(in);
+
+        // Start slide-animation based on swipe direction
         if (direction < 0)
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_left);
         else
@@ -229,12 +244,12 @@ public class Details extends AppCompatActivity {
     }
 
     private void closeLargeImage() {
+        // If there are any animations playing right now, cancel them to prevent weird interactions
         if (animator != null) {
             animator.cancel();
         }
 
         AnimatorSet set = getImageAnimator(false);
-
         set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -248,6 +263,7 @@ public class Details extends AppCompatActivity {
                 largeImageView.setVisibility(View.GONE);
             }
         });
+        // Start animation
         set.start();
         animator = set;
     }

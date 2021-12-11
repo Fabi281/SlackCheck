@@ -87,6 +87,8 @@ public class Item implements Parcelable {
 
     public void setGrowth(double growth) { this.growth = growth; }
 
+    // Methods to be able to pass it in Intents
+
     @Override
     public int describeContents() {
         return 0;
