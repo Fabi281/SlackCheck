@@ -8,6 +8,9 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Simplified interface for calling the SlackCheck API vie Retrofit.
+ */
 public class ItemRepo {
 
     private final ItemApi itemApi;

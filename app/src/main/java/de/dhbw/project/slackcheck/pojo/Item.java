@@ -21,6 +21,12 @@ import java.util.Locale;
 
 import de.dhbw.project.slackcheck.R;
 
+/**
+ * POJO for the Item.
+ * Simple data-class for the items.
+ * Set up to be populated by the JSON-response from the API.
+ * Containing utility methods for data-binding.
+ */
 public class Item implements Parcelable {
     @SerializedName("image")
     @Expose
@@ -131,12 +137,20 @@ public class Item implements Parcelable {
 
     // Methods for data binding
 
+    /**
+     * Custom behaviour for the imageUrl parameter.
+     * If a Item is bound to a layout and the imageUrl is set, this handler will take care of loading the image using Glide.
+     * @param view The ImageView to load the image into.
+     * @param imageUrl The string specified in the imageUrl parameter.
+     */
     @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
         Glide.with(view.getContext()).load(imageUrl).placeholder(R.drawable.ic_launcher_foreground).addListener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 Toast.makeText(view.getContext(), R.string.ImageError, Toast.LENGTH_SHORT).show();
+                if (e != null)
+                    e.printStackTrace();
                 return false;
             }
 
@@ -147,6 +161,15 @@ public class Item implements Parcelable {
         }).into(view);
     }
 
+    /**
+     * Returns a formatted string of the growth value.
+     * Positive numbers: +x%
+     * Negative numbers: -x%
+     * Zero: +0%
+     *
+     * Used in data binding as item.growthFormatted.
+     * @return A formatted string of the growth value.
+     */
     public String getGrowthFormatted(){
         double growthInPercent = (getGrowth()-1)*100;
         String formatted = String.format(Locale.getDefault(), "%.2f", growthInPercent) + "%";

@@ -57,6 +57,7 @@ public class Details extends AppCompatActivity {
         currentPosition = getIntent().getIntExtra("position", 0);
         item = itemList.get(currentPosition);
 
+        // Use DataBinding to bind the data to the layout
         ActivityDetailsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_details);
         binding.setItem(item);
 
@@ -139,6 +140,9 @@ public class Details extends AppCompatActivity {
         GraphView graphView = findViewById(R.id.graph);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
 
+        // We set the viewport of the graph manually, to override default behaviour.
+        // Loop is for determining the minimum and maximum values of the graph,
+        // as well as creating datapoints for the series.
         long minDate = Long.MAX_VALUE;
         long maxDate = 0;
         double minPrice = Double.MAX_VALUE;
@@ -166,11 +170,14 @@ public class Details extends AppCompatActivity {
         series.setDataPointsRadius(10);
         series.setThickness(8);
 
+        // When a datapoint is clicked, we show the price of that datapoint in a Toast.
         series.setOnDataPointTapListener(
                 (series1, dataPoint) -> Toast.makeText(getApplicationContext(),
                         String.format(Locale.getDefault(), getString(R.string.formatted_price), dataPoint.getY()),
                         Toast.LENGTH_SHORT).show());
 
+        // "margin" for the growth value to accommodate floating point issues.
+        // (The accumulated growth will never be exactly 1.0, so we allow for some error.)
         if (i.getGrowth() < 0.99)
             series.setColor(getColor(R.color.trend_good));
         else if (i.getGrowth() > 1.01)
@@ -180,7 +187,7 @@ public class Details extends AppCompatActivity {
 
         graphView.addSeries(series);
 
-        // set viewport to contain everything
+        // set viewport to contain everything plus some padding
         graphView.getViewport().setXAxisBoundsManual(true);
         graphView.getViewport().setYAxisBoundsManual(true);
         double xMargin = (maxDate - minDate) / 5.;
@@ -190,11 +197,15 @@ public class Details extends AppCompatActivity {
         graphView.getViewport().setMinY(minPrice - yMargin);
         graphView.getViewport().setMaxY(maxPrice + yMargin);
 
+        // HumanRounding shouldn't be used for dates, as it messes up the graph,
+        // because it rounds the values ignorant of them being timestamps.
         graphView.getGridLabelRenderer().setHumanRounding(false, true);
+        // Display the timestamps in a human-readable format.
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
         graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this, sdf));
         graphView.getGridLabelRenderer().setNumHorizontalLabels(3);
 
+        // Same margins as above
         ImageView trendIndicator = findViewById(R.id.graph_trend_img);
         if (i.getGrowth() < 0.99)
             trendIndicator.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.arrow_down));

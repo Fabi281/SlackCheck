@@ -29,7 +29,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        CardItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.card_item, parent, false);
+        // Use Databinding to inflate the CardViews instead of the "default" way using only the LayoutInflater
+        // CardItemBinding is a gradle-generated class based on layout/card_item.xml
+        CardItemBinding binding = DataBindingUtil.inflate(
+                LayoutInflater.from(parent.getContext()),
+                R.layout.card_item,
+                parent,
+                false);
         return new ItemViewHolder(binding);
     }
 
